@@ -29,8 +29,17 @@ if 'We_are_on_Heroku' in os.environ:
     PORT = int(os.environ.get('PORT', '8443'))
     WEBAPP_PORT = int(os.getenv('PORT'))
 
-
     bot.remove_webhook()
+
+    async def hook_set():
+        if not HEROKU_APP_NAME:
+            print('You have forgot to set HEROKU_APP_NAME')
+            quit()
+        await bot.set_webhook(WEBHOOK_URL)
+        print(await bot.get_webhook_info())
+    asyncio.run(hook_set())
+    bot.close()
+
     #bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
     #app.run()
     
@@ -41,18 +50,9 @@ if 'We_are_on_Heroku' in os.environ:
     #updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN, webhook_url="https://bot-for-kadry-main.herokuapp.com/" + TOKEN)
     #updater.idle()
 else:
-    Run_On_Heroku = False
+    Run_On_Heroku = False # локально запускаем без webhook 
     from config import *
 
-
-# вот примерно такой вариант для хранения во внешней базе данных:
-# storage = RedisStorage2(
-#     host=REDIS_HOST, 
-#     port=REDIS_PORT,
-#     db=REDIS_DB,
-#     password=REDIS_PASSWORD,
-#     # и т.д.
-# )
 
 #======================== Для работы с состояниями
 from aiogram.dispatcher import FSMContext
