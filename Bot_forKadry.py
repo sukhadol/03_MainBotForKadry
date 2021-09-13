@@ -20,11 +20,11 @@ dp = Dispatcher(bot, storage=storage)
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
-    print ('..Run_On_Heroku = True')
+    #print ('..Run_On_Heroku = True')
     # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
 
     BOT_TOKEN = os.getenv('TOKEN')
-    print('...BOT_TOKEN=' + BOT_TOKEN)
+    #print('...BOT_TOKEN=' + BOT_TOKEN)
     HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
     # webhook settings
     WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
@@ -33,17 +33,17 @@ if 'We_are_on_Heroku' in os.environ:
     # webserver settings
     WEBAPP_HOST = '0.0.0.0'
     PORT = int(os.environ.get('PORT', '8443'))
-    print('...Port=' + str(PORT))
+    #print('...Port=' + str(PORT))
     WEBAPP_PORT = int(os.getenv('PORT'))
-    print('...Port2=' + str(PORT))
 
     #bot.remove_webhook()
-
-    async def hook_set():
-        await bot.set_webhook(WEBHOOK_URL)
-        print(await bot.get_webhook_info())
-    asyncio.run(hook_set())
-    bot.close()
+    await bot.set_webhook(WEBHOOK_URL)
+    
+    # async def hook_set():
+    #     await bot.set_webhook(WEBHOOK_URL)
+    #     print(await bot.get_webhook_info())
+    # asyncio.run(hook_set())
+    # bot.close()
 
     #bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
     #app.run()
