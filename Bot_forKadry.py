@@ -20,21 +20,16 @@ dp = Dispatcher(bot, storage=storage)
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
     bot.remove_webhook()
-    bot.set_webhook('https://test.com/' + TOKEN)
+    bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
     #app.run()
     
-    PORT = int(os.environ.get('PORT', '8443'))
-    updater = Updater(TOKEN)
+    #PORT = int(os.environ.get('PORT', '8443'))
+    #updater = Updater(TOKEN)
     # add handlers
-    updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN,
-                      webhook_url="https://<appname>.herokuapp.com/" + TOKEN)
-    updater.idle()
+    #updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN, webhook_url="https://bot-for-kadry-main.herokuapp.com/" + TOKEN)
+    #updater.idle()
 else:
     Run_On_Heroku = False
-
-
 
 
 # вот примерно такой вариант для хранения во внешней базе данных:
