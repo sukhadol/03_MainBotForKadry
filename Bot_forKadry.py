@@ -4,7 +4,6 @@ from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
 from aiogram.dispatcher import Dispatcher
 
 import os
-#from os import 'CHAT', 'ADMIN_CHAT', 'TOKEN', 'HEROKU_APP_NAME', 'We_are_on_Heroku'
 
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
@@ -12,20 +11,18 @@ from aiogram.types import ReplyKeyboardRemove, \
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 print ('..====== начали ===== ')
-#bot = Bot(token=TOKEN)
-bot = Bot(token=os.getenv('TOKEN'))
-storage=MemoryStorage()
-dp = Dispatcher(bot, storage=storage)
-
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
-    #print ('..Run_On_Heroku = True')
     # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
-
+    CHAT = os.getenv('CHAT')
+    ADMIN_CHAT = os.getenv('ADMIN_CHAT')
     BOT_TOKEN = os.getenv('TOKEN')
-    #print('...BOT_TOKEN=' + BOT_TOKEN)
     HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
+    bot = Bot(token=BOT_TOKEN)
+    storage=MemoryStorage()
+    dp = Dispatcher(bot, storage=storage)
+
     # webhook settings
     WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
     WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
@@ -37,7 +34,7 @@ if 'We_are_on_Heroku' in os.environ:
     WEBAPP_PORT = int(os.getenv('PORT'))
 
     #bot.remove_webhook()
-    await bot.set_webhook(WEBHOOK_URL)
+    bot.set_webhook(WEBHOOK_URL)
     
     # async def hook_set():
     #     await bot.set_webhook(WEBHOOK_URL)
@@ -58,6 +55,9 @@ else:
     print ('..Run_On_Heroku = NO')
     Run_On_Heroku = False # локально запускаем без webhook 
     from config import *
+    bot = Bot(token=TOKEN)
+    storage=MemoryStorage()
+    dp = Dispatcher(bot, storage=storage)
 
 
 #======================== Для работы с состояниями
