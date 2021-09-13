@@ -5,8 +5,6 @@ from aiogram.dispatcher import Dispatcher
 
 import os
 
-from config import *
-#import keyboards as kb
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
@@ -23,6 +21,7 @@ if 'We_are_on_Heroku' in os.environ:
     bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
     #app.run()
     
+    # а это версия из иного источника:
     #PORT = int(os.environ.get('PORT', '8443'))
     #updater = Updater(TOKEN)
     # add handlers
@@ -30,6 +29,7 @@ if 'We_are_on_Heroku' in os.environ:
     #updater.idle()
 else:
     Run_On_Heroku = False
+    from config import *
 
 
 # вот примерно такой вариант для хранения во внешней базе данных:
