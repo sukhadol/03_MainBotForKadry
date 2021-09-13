@@ -37,7 +37,7 @@ if 'We_are_on_Heroku' in os.environ:
     WEBAPP_PORT = int(os.getenv('PORT'))
     print('...Port2=' + str(PORT))
 
-    bot.remove_webhook()
+    #bot.remove_webhook()
 
     async def hook_set():
         await bot.set_webhook(WEBHOOK_URL)
