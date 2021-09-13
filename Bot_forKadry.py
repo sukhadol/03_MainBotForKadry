@@ -16,7 +16,6 @@ print ('..====== начали ===== ')
 bot = Bot(token=os.getenv('TOKEN'))
 storage=MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-print ('..====== начали2 ===== ')
 
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
 if 'We_are_on_Heroku' in os.environ:
@@ -34,9 +33,9 @@ if 'We_are_on_Heroku' in os.environ:
     # webserver settings
     WEBAPP_HOST = '0.0.0.0'
     PORT = int(os.environ.get('PORT', '8443'))
-    print('...Port=' + PORT)
+    print('...Port=' + str(PORT))
     WEBAPP_PORT = int(os.getenv('PORT'))
-    print('...Port2=' + PORT)
+    print('...Port2=' + str(PORT))
 
     bot.remove_webhook()
 
