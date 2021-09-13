@@ -17,8 +17,21 @@ dp = Dispatcher(bot, storage=storage)
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
+
+    BOT_TOKEN = os.getenv('TOKEN')
+    HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
+    # webhook settings
+    WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
+    WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
+    WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+    # webserver settings
+    WEBAPP_HOST = '0.0.0.0'
+    PORT = int(os.environ.get('PORT', '8443'))
+    WEBAPP_PORT = int(os.getenv('PORT'))
+
+
     bot.remove_webhook()
-    bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
+    #bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
     #app.run()
     
     # а это версия из иного источника:
@@ -267,6 +280,21 @@ async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
 
-if __name__ == '__main__':
-    executor.start_polling(dp, on_shutdown=shutdown)
+
+if Run_On_Heroku:
+    def main():
+        start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        skip_updates=True,
+        on_startup=on_startup,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+        )
+else:
+    if __name__ == '__main__':
+        executor.start_polling(dp, on_shutdown=shutdown)
+
+
+
 
