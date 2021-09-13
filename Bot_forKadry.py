@@ -18,8 +18,8 @@ dp = Dispatcher(bot, storage=storage)
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
 
-    BOT_TOKEN = os.getenv('TOKEN')
-    HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
+    BOT_TOKEN = os.getenv(TOKEN)
+    HEROKU_APP_NAME = os.getenv(HEROKU_APP_NAME)
     # webhook settings
     WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
     WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
