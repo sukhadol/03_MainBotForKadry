@@ -4,7 +4,7 @@ from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
 from aiogram.dispatcher import Dispatcher
 
 import os
-from os import 'CHAT', 'ADMIN_CHAT', 'TOKEN', 'HEROKU_APP_NAME', 'We_are_on_Heroku'
+#from os import 'CHAT', 'ADMIN_CHAT', 'TOKEN', 'HEROKU_APP_NAME', 'We_are_on_Heroku'
 
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
