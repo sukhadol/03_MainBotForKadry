@@ -4,19 +4,23 @@ from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
 from aiogram.dispatcher import Dispatcher
 
 import os
+from os import CHAT, ADMIN_CHAT, TOKEN, HEROKU_APP_NAME, We_are_on_Heroku
 
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
+print ('..====== начали ===== ')
 bot = Bot(token=TOKEN)
 storage=MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
+print ('..====== начали2 ===== ')
 
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
+    print ('..Run_On_Heroku = True')
     # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
 
     BOT_TOKEN = os.getenv(TOKEN)
@@ -51,6 +55,7 @@ if 'We_are_on_Heroku' in os.environ:
     #updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN, webhook_url="https://bot-for-kadry-main.herokuapp.com/" + TOKEN)
     #updater.idle()
 else:
+    print ('..Run_On_Heroku = NO')
     Run_On_Heroku = False # локально запускаем без webhook 
     from config import *
 
