@@ -297,9 +297,11 @@ async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
 
+print('....007')
 
 if __name__ == '__main__':
     if Run_On_Heroku:
+        print('....004')
         def main():
             # start_webhook(
             # dispatcher=dp,
@@ -309,7 +311,7 @@ if __name__ == '__main__':
             # host=WEBAPP_HOST,
             # port=WEBAPP_PORT,
             # )
-
+            print('....005')
             executor.start_webhook(
                 dispatcher=dp,
                 webhook_path=WEBHOOK_PATH,
@@ -318,6 +320,7 @@ if __name__ == '__main__':
                 host=WEBAPP_HOST,
                 port=WEBAPP_PORT,
             )
+            print('....006')
 
     else:
         executor.start_polling(dp, on_shutdown=shutdown)
