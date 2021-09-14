@@ -38,8 +38,8 @@ if 'We_are_on_Heroku' in os.environ:
     #bot.set_webhook(WEBHOOK_URL)
     
     # еще из одного места - Run after startup
-    #async def on_startup():
-    async def on_startup(dispatcher: Dispatcher) -> None:
+    #async def on_startup(dispatcher: Dispatcher) -> None: #в одном месте такую строку предлагали, не понял зачем
+    async def on_startup():
         print('....0001')
         await bot.delete_webhook()
         print('....002')
@@ -300,15 +300,17 @@ async def shutdown(dispatcher: Dispatcher):
 print('....007')
 
 if __name__ == '__main__':
-    #print('... что-то есть')
     if Run_On_Heroku:
         print('....004')
-        def main():
-            print('....005')
-            #start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
-            executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
-            print('....006')
 
+        executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+        print('....008')
+
+        # def main():
+        #     print('....005')
+        #     #start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+        #     executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+        #     print('....006')
     else:
         print('.... 9999')
         executor.start_polling(dp, on_shutdown=shutdown)
