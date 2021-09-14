@@ -1,1 +1,1 @@
-web: python3 test.py
+web: python Bot_forKadry.py
