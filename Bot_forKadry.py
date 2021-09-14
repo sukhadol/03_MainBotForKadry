@@ -40,8 +40,11 @@ if 'We_are_on_Heroku' in os.environ:
     # еще из одного места - Run after startup
     #async def on_startup():
     async def on_startup(dispatcher: Dispatcher) -> None:
+        print('....0001')
         await bot.delete_webhook()
+        print('....002')
         await bot.set_webhook(WEBHOOK_URL)
+        print('....003')
 
     # async def hook_set():
     #     await bot.set_webhook(WEBHOOK_URL)
@@ -66,6 +69,7 @@ else:
     storage=MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
 
+print('....вводную часть завершили')
 
 #======================== Для работы с состояниями
 from aiogram.dispatcher import FSMContext
