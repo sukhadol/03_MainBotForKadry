@@ -303,15 +303,8 @@ if __name__ == '__main__':
     if Run_On_Heroku:
         print('....004')
         def main():
-            # start_webhook(
-            # dispatcher=dp,
-            # webhook_path=WEBHOOK_PATH,
-            # skip_updates=True,
-            # on_startup=on_startup,
-            # host=WEBAPP_HOST,
-            # port=WEBAPP_PORT,
-            # )
             print('....005')
+            # start_webhook(
             executor.start_webhook(
                 dispatcher=dp,
                 webhook_path=WEBHOOK_PATH,
@@ -319,7 +312,7 @@ if __name__ == '__main__':
                 skip_updates=True,
                 host=WEBAPP_HOST,
                 port=WEBAPP_PORT,
-            )
+                )
             print('....006')
 
     else:
