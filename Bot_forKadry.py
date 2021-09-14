@@ -1,6 +1,7 @@
 from aiogram import Bot, types
 from aiogram.utils import executor
 from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
+from aiogram import Dispatcher
 from aiogram.dispatcher import Dispatcher
 
 import os
@@ -34,8 +35,14 @@ if 'We_are_on_Heroku' in os.environ:
     WEBAPP_PORT = int(os.getenv('PORT'))
 
     #bot.remove_webhook()
-    bot.set_webhook(WEBHOOK_URL)
+    #bot.set_webhook(WEBHOOK_URL)
     
+    # еще из одного места - Run after startup
+    #async def on_startup():
+    async def on_startup(dispatcher: Dispatcher) -> None:
+        await bot.delete_webhook()
+        await bot.set_webhook(WEBHOOK_URL)
+
     # async def hook_set():
     #     await bot.set_webhook(WEBHOOK_URL)
     #     print(await bot.get_webhook_info())
@@ -287,18 +294,28 @@ async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.wait_closed()
 
 
-if Run_On_Heroku:
-    def main():
-        start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        skip_updates=True,
-        on_startup=on_startup,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-        )
-else:
-    if __name__ == '__main__':
+if __name__ == '__main__':
+    if Run_On_Heroku:
+        def main():
+            # start_webhook(
+            # dispatcher=dp,
+            # webhook_path=WEBHOOK_PATH,
+            # skip_updates=True,
+            # on_startup=on_startup,
+            # host=WEBAPP_HOST,
+            # port=WEBAPP_PORT,
+            # )
+
+            executor.start_webhook(
+                dispatcher=dp,
+                webhook_path=WEBHOOK_PATH,
+                on_startup=on_startup,
+                skip_updates=True,
+                host=WEBAPP_HOST,
+                port=WEBAPP_PORT,
+            )
+
+    else:
         executor.start_polling(dp, on_shutdown=shutdown)
 
 
