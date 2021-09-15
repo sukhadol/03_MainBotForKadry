@@ -12,7 +12,7 @@ from aiogram.types import ReplyKeyboardRemove, \
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 print ('..====== начали ===== ')
-# Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku, можно пробовать также значением DYNO 
+# Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
     # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
@@ -80,11 +80,10 @@ class Status (StatesGroup):
     st_00 = State() # начальный статус, ничего не делали
     st_01 = State() # после кнопки Запуск выбрали действие, но пока не ввели подробных данных
     st_02 = State() # ввели все данные для отправки
-#await Status.st_00.set()
-#state = Dispatcher.get_current().current_state()
 # для явного задания состояния строка типа этой:
-# await OrderFood.waiting_for_food_name.set()
-#мы явно говорим боту встать в состояние waiting_for_food_name из группы OrderFood
+# await Status.st_00.set()
+# мы явно говорим боту встать в состояние st_00 из группы Status
+# state = Dispatcher.get_current().current_state()
 
 global begining_text, text_of_obiavy, full_text, codeDO, send_admin
 begining_text = 'пустое начало'
@@ -215,16 +214,6 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
     # Не забываем отчитаться о получении колбэка
     await callback_query.answer()
 
-#====  примеры удаления клавиатуры:
-
-# для telebot
-#hideBoard = types.ReplyKeyboardRemove()  # if sent as reply_markup, will hide the keyboard
-#bot.send_photo(cid, open('kitten.jpg', 'rb'), reply_markup=hideBoard)
-
-# Edit only the reply markup of messages sent by the bot.
-# bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
-
-
 
 #======================== Меню размещения детального описания вакансии или сообщения 
 
@@ -296,6 +285,7 @@ async def strange_txt(message: types.Message):
 async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
+
 
 print('....007')
 
