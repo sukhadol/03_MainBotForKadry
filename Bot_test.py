@@ -15,12 +15,9 @@ print ('..====== начали ===== ')
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
-    # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
-    CHAT = os.getenv('CHAT')
-    ADMIN_CHAT = os.getenv('ADMIN_CHAT')
+    # Фактически заданные переменные окружения на Heroku: TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
     BOT_TOKEN = os.getenv('TOKEN')
-    #HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
-    HEROKU_APP_NAME = 'bot-for-kadry-main'     # Heroku git URL =  https://git.heroku.com/bot-for-kadry-main.git
+    HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME') # попробовал на всякий случай задать в явном виде HEROKU_APP_NAME = 'bot-for-kadry-main'  - тоже не помогло
     bot = Bot(token=BOT_TOKEN)
     storage=MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
