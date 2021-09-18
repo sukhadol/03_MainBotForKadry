@@ -20,9 +20,7 @@ if 'We_are_on_Heroku' in os.environ:
     ADMIN_CHAT = os.getenv('ADMIN_CHAT')
     BOT_TOKEN = os.getenv('TOKEN')
     #HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
-    # Heroku git URL =  https://git.heroku.com/bot-for-kadry-main.git
-    # т.е. так понимаю HEROKU_APP_NAME = bot-for-kadry-main
-    HEROKU_APP_NAME = 'bot-for-kadry-main'
+    HEROKU_APP_NAME = 'bot-for-kadry-main'     # Heroku git URL =  https://git.heroku.com/bot-for-kadry-main.git
     bot = Bot(token=BOT_TOKEN)
     storage=MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
@@ -34,13 +32,9 @@ if 'We_are_on_Heroku' in os.environ:
     WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
     # webserver settings
     WEBAPP_HOST = '0.0.0.0'
-    WEBAPP_PORT = int(os.environ.get('PORT', '8443'))
-    # PORT = int(os.environ.get('PORT', '8443'))
-    # WEBAPP_PORT = int(os.getenv('PORT'))
-    print('...WEBHOOK_HOST=' + str(WEBHOOK_HOST))
-    print('...WEBHOOK_PATH=' + str(WEBHOOK_PATH))
-    print('...WEBHOOK_URL=' + str(WEBHOOK_URL))
-    print('...WEBAPP_PORT=' + str(WEBAPP_PORT))
+    WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
+    # print('...WEBHOOK_URL=' + str(WEBHOOK_URL))
+    # print('...WEBAPP_PORT=' + str(WEBAPP_PORT))
 
     async def on_startup():
         print('....контроль прохода к строке 0001')
@@ -94,8 +88,6 @@ async def process_start_command(message: types.Message):
     else:
         whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
         await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋', reply_markup=MAIN_KB)
-
-
 
 #Ещё вроде надо закрывать соединение с хранилищем состояний, для этого объявляем функцию:
 async def shutdown(dispatcher: Dispatcher):
