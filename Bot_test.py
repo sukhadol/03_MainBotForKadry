@@ -49,23 +49,11 @@ else:
 
 
 #===== блок Помощи
-help_message = text(
-    "Это бот раздела \"Закупочный хаб ProЗакупки\".\n",
-    "Он поможет в размещении вакансии или резюме, а также через него можно связаться с администрацией канала.",
-    "Ну и вообще сделать все что надо.",
-	"\nНаши каналы:",
-	"- Новости Интерфакса по закупкам https://t.me/InterfaxProZakupkiNews",
-	"- Работа и Карьера в закупках: Вакансии & Кандидаты https://t.me/jobzakupki",
-    "\nЕсли вдруг бот не запускается, воспользуйтесь командой\n",
-	"/start - приветствие",
-	sep="\n"
-)
-
+help_message = text("здесь текстовое сообщение бла-бла-бла, пока удалено, если вдруг бот не запускается, воспользуйтесь командой /start")
 @dp.message_handler(lambda message: message.text == btn_help)
-@dp.message_handler(commands=['help'], state="*")
+@dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
-    await message.reply(help_message, disable_web_page_preview = True) # убран предпросмотр ссылок
-
+    await message.reply(help_message, disable_web_page_preview = True)
 
 
 #===== блок Начала
