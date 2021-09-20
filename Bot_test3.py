@@ -24,6 +24,7 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBAPP_HOST = 'localhost'  # or ip
 WEBAPP_PORT = 3001
 WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
+WEBAPP_PORT = 8443
 
 #logging.basicConfig(level=logging.INFO)
 
@@ -38,7 +39,7 @@ async def echo(message: types.Message):
 
 
 async def on_startup(dp):
-    await bot.delete_webhook()
+    #await bot.delete_webhook()
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
