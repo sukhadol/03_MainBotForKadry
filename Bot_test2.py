@@ -12,16 +12,21 @@ from aiogram.dispatcher.webhook import get_new_configured_app, SendMessage
 from aiogram.types import ChatType, ParseMode, ContentTypes
 from aiogram.utils.markdown import hbold, bold, text, link
 
-TOKEN = 'BOT TOKEN HERE'
+#пример взят отсюда https://aiogram-birdi7.readthedocs.io/en/latest/examples/webhook_example.html
+#но убрал сертификаты
+import os
+BOT_TOKEN = os.getenv('TOKEN')
+TOKEN = BOT_TOKEN
 
 WEBHOOK_HOST = 'example.com'  # Domain name or IP addres which your bot is located.
+
 WEBHOOK_PORT = 443  # Telegram Bot API allows only for usage next ports: 443, 80, 88 or 8443
 WEBHOOK_URL_PATH = '/webhook'  # Part of URL
 
 # This options needed if you use self-signed SSL certificate
 # Instructions: https://core.telegram.org/bots/self-signed
-WEBHOOK_SSL_CERT = './webhook_cert.pem'  # Path to the ssl certificate
-WEBHOOK_SSL_PRIV = './webhook_pkey.pem'  # Path to the ssl private key
+#WEBHOOK_SSL_CERT = './webhook_cert.pem'  # Path to the ssl certificate
+#WEBHOOK_SSL_PRIV = './webhook_pkey.pem'  # Path to the ssl private key
 
 WEBHOOK_URL = f"https://{WEBHOOK_HOST}:{WEBHOOK_PORT}{WEBHOOK_URL_PATH}"
 
@@ -138,7 +143,7 @@ async def on_startup(app):
             await bot.delete_webhook()
 
         # Set new URL for webhook
-        await bot.set_webhook(WEBHOOK_URL, certificate=open(WEBHOOK_SSL_CERT, 'rb'))
+        await bot.set_webhook(WEBHOOK_URL)
         # If you want to use free certificate signed by LetsEncrypt you need to set only URL without sending certificate.
 
 
@@ -163,11 +168,11 @@ if __name__ == '__main__':
     app.on_shutdown.append(on_shutdown)
 
     # Generate SSL context
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+    #context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    #context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
     # Start web-application.
-    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT, ssl_context=context)
+    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
     # Note:
     #   If you start your bot using nginx or Apache web server, SSL context is not required.
     #   Otherwise you need to set `ssl_context` parameter.

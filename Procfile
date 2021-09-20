@@ -1,1 +1,1 @@
-web: python bot_main.py
+web: python Bot_forKadry.py
