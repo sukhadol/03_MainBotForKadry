@@ -35,7 +35,7 @@ if 'We_are_on_Heroku' in os.environ:
     # print('...WEBHOOK_URL=' + str(WEBHOOK_URL))
     # print('...WEBAPP_PORT=' + str(WEBAPP_PORT))
 
-    async def on_startup():
+    async def on_startup(dp):
         print('....контроль прохода к строке 0001')
         await bot.delete_webhook()
         print('....контроль прохода к строке 002')
@@ -95,7 +95,8 @@ if __name__ == '__main__':
         print('....контроль прохода к строке 004')
         def main():
             print('....контроль прохода к строке 005')
-            executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+            start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+            #executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
             print('....контроль прохода к строке 006')
     else:
         executor.start_polling(dp, on_shutdown=shutdown)
