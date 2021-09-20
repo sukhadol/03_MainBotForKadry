@@ -5,6 +5,14 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 
 
+from aiogram.utils import executor
+from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
+from aiogram import Dispatcher
+from aiogram.types import ReplyKeyboardRemove, \
+    ReplyKeyboardMarkup, KeyboardButton, \
+    InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
 import os
 BOT_TOKEN = os.getenv('TOKEN') 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME') 
@@ -29,7 +37,6 @@ dp = Dispatcher(bot)
 
 
 #===== блок текстов
-from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
 
 help_message = text("здесь текстовое сообщение бла-бла-бла, пока удалено, если вдруг бот не запускается, воспользуйтесь командой /start")
 @dp.message_handler(lambda message: message.text == btn_help)
