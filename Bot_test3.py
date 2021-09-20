@@ -29,6 +29,8 @@ dp = Dispatcher(bot)
 
 
 #===== блок текстов
+from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
+
 help_message = text("здесь текстовое сообщение бла-бла-бла, пока удалено, если вдруг бот не запускается, воспользуйтесь командой /start")
 @dp.message_handler(lambda message: message.text == btn_help)
 @dp.message_handler(commands=['help'])
