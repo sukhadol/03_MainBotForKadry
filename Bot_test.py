@@ -28,8 +28,8 @@ if 'We_are_on_Heroku' in os.environ:
     WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
     WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
     # webserver settings
-    #WEBAPP_HOST = '0.0.0.0'
-    WEBAPP_HOST = 'localhost'  # or ip
+    WEBAPP_HOST = '0.0.0.0'
+    #WEBAPP_HOST = 'localhost'  # or ip
     WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
     WEBAPP_PORT = 8443
     # print('...WEBHOOK_URL=' + str(WEBHOOK_URL))
