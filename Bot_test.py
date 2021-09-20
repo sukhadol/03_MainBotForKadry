@@ -31,6 +31,7 @@ if 'We_are_on_Heroku' in os.environ:
     #WEBAPP_HOST = '0.0.0.0'
     WEBAPP_HOST = 'localhost'  # or ip
     WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
+    WEBAPP_PORT = 8443
     # print('...WEBHOOK_URL=' + str(WEBHOOK_URL))
     # print('...WEBAPP_PORT=' + str(WEBAPP_PORT))
 
