@@ -48,16 +48,22 @@ else:
     dp = Dispatcher(bot, storage=storage)
 
 
-#===== блок Помощи
+#===== блок текстов
 help_message = text("здесь текстовое сообщение бла-бла-бла, пока удалено, если вдруг бот не запускается, воспользуйтесь командой /start")
 @dp.message_handler(lambda message: message.text == btn_help)
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
     await message.reply(help_message, disable_web_page_preview = True)
 
+tmp_message = text("здесь потом будет основной функционал общения с пользователем")
+@dp.message_handler(lambda message: message.text == btn_zapusk)
+@dp.message_handler(commands=['zapusk'])
+async def process_help_command(message: types.Message):
+    await message.reply(tmp_message, disable_web_page_preview = True)
+
 
 #===== блок Начала
-btn_zapusk = 'Запуск - отключен'
+btn_zapusk = 'Запуск'
 btn_help = 'Помощь'
 MAIN_KB = ReplyKeyboardMarkup(
                              resize_keyboard=True).row(
