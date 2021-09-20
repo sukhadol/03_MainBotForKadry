@@ -5,12 +5,13 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 
+#вставка моих данных - начало
 import os
-BOT_TOKEN = os.getenv('TOKEN')
+BOT_TOKEN = os.getenv('TOKEN') 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME') # попробовал на всякий случай задать в явном виде HEROKU_APP_NAME = 'bot-for-kadry-main'  - тоже не помогло
+#вставка моих данных - конец
 
 API_TOKEN = BOT_TOKEN
-
 
 # webhook settings
 WEBHOOK_HOST = 'https://your.domain'
@@ -22,6 +23,7 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
 WEBAPP_HOST = 'localhost'  # or ip
+WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 3001
 WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
 WEBAPP_PORT = 8443
