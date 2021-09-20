@@ -1,5 +1,4 @@
 import asyncio
-#import logging
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -29,13 +28,13 @@ WEBAPP_PORT = 3001 # - это исходный вариант
 WEBAPP_PORT = int(os.environ.get('PORT', '8443')) # фактический результат - каждый раз берет какой-то порт из переменной окружения, все время разные
 #WEBAPP_PORT = 8443
 
-#logging.basicConfig(level=logging.INFO)
 
 loop = asyncio.get_event_loop()
 bot = Bot(token=API_TOKEN, loop=loop)
 dp = Dispatcher(bot)
 
 
+#просто повтор сказанного пользователем
 @dp.message_handler()
 async def echo(message: types.Message):
     await bot.send_message(message.chat.id, message.text)
