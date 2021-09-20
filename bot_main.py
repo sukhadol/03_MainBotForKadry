@@ -39,7 +39,9 @@ if 'We_are_on_Heroku' in os.environ:
 
     loop = asyncio.get_event_loop()
     bot = Bot(token=BOT_TOKEN, loop=loop)
-    dp = Dispatcher(bot)
+    #dp = Dispatcher(bot)
+    storage=MemoryStorage()
+    dp = Dispatcher(bot, storage=storage)
 
 
     async def on_startup(dp):
