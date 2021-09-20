@@ -122,10 +122,10 @@ MAIN_KB = ReplyKeyboardMarkup(
 async def process_start_command(message: types.Message):
     if ((message.from_user.first_name is None) and (message.from_user.first_name is None)):
         whom_say = message.from_user.username
-        await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋', reply_markup=MAIN_KB)
+        await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
     else:
         whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
-        await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋', reply_markup=MAIN_KB)
+        await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
     await Status.st_00.set()
 
 
