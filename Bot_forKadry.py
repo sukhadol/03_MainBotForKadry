@@ -1,15 +1,15 @@
+import asyncio
 from aiogram import Bot, types
 from aiogram.utils import executor
 from aiogram.utils.markdown import LIST_MD_SYMBOLS, text
 from aiogram import Dispatcher
 from aiogram.dispatcher import Dispatcher
-
-import os
-
+from aiogram.utils.executor import start_webhook
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+import os
 
 print ('..====== начали ===== ')
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku
@@ -20,7 +20,8 @@ if 'We_are_on_Heroku' in os.environ:
     ADMIN_CHAT = os.getenv('ADMIN_CHAT')
     BOT_TOKEN = os.getenv('TOKEN')
     HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
-    bot = Bot(token=BOT_TOKEN)
+    loop = asyncio.get_event_loop()
+    bot = Bot(token=BOT_TOKEN, loop=loop)
     storage=MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
 
@@ -30,37 +31,19 @@ if 'We_are_on_Heroku' in os.environ:
     WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
     # webserver settings
     WEBAPP_HOST = '0.0.0.0'
-    PORT = int(os.environ.get('PORT', '8443'))
+    #PORT = int(os.environ.get('PORT', '8443'))
     #print('...Port=' + str(PORT))
-    WEBAPP_PORT = int(os.getenv('PORT'))
+    #WEBAPP_PORT = int(os.getenv('PORT'))
+    WEBAPP_PORT = int(os.environ.get('PORT', '8443'))
 
-    #bot.remove_webhook()
-    #bot.set_webhook(WEBHOOK_URL)
-    
-    # еще из одного места - Run after startup
-    #async def on_startup(dispatcher: Dispatcher) -> None: #в одном месте такую строку предлагали, не понял зачем
+
     async def on_startup():
         print('....0001')
-        await bot.delete_webhook()
+        await bot.delete_webhook(dp)
         print('....002')
         await bot.set_webhook(WEBHOOK_URL)
         print('....003')
 
-    # async def hook_set():
-    #     await bot.set_webhook(WEBHOOK_URL)
-    #     print(await bot.get_webhook_info())
-    # asyncio.run(hook_set())
-    # bot.close()
-
-    #bot.set_webhook('https://bot-for-kadry-main.herokuapp.com/' + TOKEN)
-    #app.run()
-    
-    # а это версия из иного источника:
-    #PORT = int(os.environ.get('PORT', '8443'))
-    #updater = Updater(TOKEN)
-    # add handlers
-    #updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN, webhook_url="https://bot-for-kadry-main.herokuapp.com/" + TOKEN)
-    #updater.idle()
 else:
     print ('..Run_On_Heroku = NO')
     Run_On_Heroku = False # локально запускаем без webhook 
@@ -286,6 +269,9 @@ async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
 
+async def on_shutdown(dp):
+    # если что-то надо для окончания
+    pass
 
 print('....007')
 
@@ -295,11 +281,9 @@ if __name__ == '__main__':
         def main():
             print('....005')
             #start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
-            executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+            start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, on_shutdown=on_shutdown, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
+
+            #executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
             print('....006')
     else:
-        print('.... 9999')
         executor.start_polling(dp, on_shutdown=shutdown)
-#else:
-    #print('... пусто и ничего не делаем')
-
