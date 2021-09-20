@@ -46,7 +46,9 @@ if 'We_are_on_Heroku' in os.environ:
 
     async def on_startup(dp):
         await bot.delete_webhook(dp) 
-        await bot.set_webhook(WEBHOOK_URL)
+        print('...все удалено')
+
+        #await bot.set_webhook(WEBHOOK_URL)
         # и дальше все что надо после запуска
 
     async def on_shutdown(dp):
