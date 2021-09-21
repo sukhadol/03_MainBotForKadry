@@ -177,22 +177,22 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
     if codeDO == 1:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ВАКАНСИЮ') 
-        await bot.send_message(callback_query.from_user.id, f'Для размещения вакансии введите ниже ее описание, указав:\n- организацию,\n- город,\n- должность, требования к соискателю и его обязанности,\n- ожидаемое вознаграждение,\n-контакты для связи.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)', parse_mode='Markdown') 
+        await bot.send_message(callback_query.from_user.id, f'Для размещения вакансии введите ниже ее описание, указав:\n- организацию,\n- город,\n- должность, требования к соискателю и его обязанности,\n- ожидаемое вознаграждение,\n-контакты для связи.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки).\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
         begining_text = '*#ВАКАНСИЯ* от @' + str(callback_query.from_user.username)
     elif codeDO == 2:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ РЕЗЮМЕ') 
-        await bot.send_message(callback_query.from_user.id, f'Для размещения резюме введите ниже его текст.\n\nВ тексте можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)', parse_mode='Markdown') 
+        await bot.send_message(callback_query.from_user.id, f'Для размещения резюме введите ниже его текст.\n\nВ тексте можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
         begining_text = '*#РЕЗЮМЕ* от @' + str(callback_query.from_user.username)
     elif codeDO == 3:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: ПРЕДЛОЖИТЬ УСЛУГИ') 
-        await bot.send_message(callback_query.from_user.id, f'Введите описание предлагаемых Вами услуг.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)', parse_mode='Markdown')  
+        await bot.send_message(callback_query.from_user.id, f'Введите описание предлагаемых Вами услуг.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown')  
         begining_text = '*#УСЛУГИ_В_СФЕРЕ_ЗАКУПОК* от @' + str(callback_query.from_user.username)
     elif codeDO == 4:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ИНОЕ СООБЩЕНИЕ') 
-        await bot.send_message(callback_query.from_user.id, f'Введите свое сообщение') 
+        await bot.send_message(callback_query.from_user.id, f'Введите свое сообщение.\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.') 
         begining_text = 'Сообщение от @' + str(callback_query.from_user.username)
     elif codeDO == 5:
         send_admin = 'No'
