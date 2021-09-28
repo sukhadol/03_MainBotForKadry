@@ -259,11 +259,12 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
             await bot.send_message(chat_id = ADMIN_CHAT, text=full_text, parse_mode='Markdown') 
         else:
             await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-            # ниже 3 строчки - для отправки сообщения в ВК
-            message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nhttps://t.me/jobzakupki')
-            params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
-            requests.get('https://api.vk.com/method/wall.post', params=params)
-
+            if codeDO < 2:   # ниже 5 строчек - для отправки сообщения в ВК
+                message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+                message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
+                message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
+                params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+                requests.get('https://api.vk.com/method/wall.post', params=params)
             await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
         await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki') 
     elif codeYN == 2:
