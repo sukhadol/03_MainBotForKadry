@@ -28,6 +28,10 @@ if 'We_are_on_Heroku' in os.environ:
     BOT_TOKEN = os.getenv('TOKEN')
     HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
 
+    # теперь переменные для работы с ВК
+    groupId_in_VK = os.environ.get("groupId_in_VK")
+    token_VK_access_token_to_walls = os.environ.get("token_VK_access_token_to_walls")  # Токен ВК с доступом только к wall, для опубликования там сообщений
+
     # webhook settings
     WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
     WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}' 
@@ -255,6 +259,11 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
             await bot.send_message(chat_id = ADMIN_CHAT, text=full_text, parse_mode='Markdown') 
         else:
             await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
+            # ниже 3 строчки - для отправки сообщения в ВК
+            message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nhttps://t.me/jobzakupki')
+            params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+            await bot.requests.get('https://api.vk.com/method/wall.post', params=params)
+
             await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
         await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki') 
     elif codeYN == 2:
@@ -288,6 +297,5 @@ if __name__ == '__main__':
     if Run_On_Heroku:
         start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH, on_startup=on_startup, on_shutdown=on_shutdown,
                     skip_updates=True, host=WEBAPP_HOST, port=WEBAPP_PORT)
-
     else:
         executor.start_polling(dp, on_shutdown=shutdown)
