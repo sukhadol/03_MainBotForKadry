@@ -259,7 +259,7 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
             await bot.send_message(chat_id = ADMIN_CHAT, text=full_text, parse_mode='Markdown') 
         else:
             await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-            if codeDO < 2:   # ниже 5 строчек - для отправки сообщения в ВК
+            if codeDO < 3:   # ниже 5 строчек - для отправки сообщения в ВК
                 message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
                 message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
                 message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
