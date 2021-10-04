@@ -283,7 +283,7 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
 # Ловим все иные непонятные тексты - в рамках state=Status.st_02, т.е. когда ввели все данные для отправки
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_02) 
 async def strange_txt(message: types.Message):
-    await message.reply("Не понимаю Вас. Нажмите выше кнопки Да или Нет, для подтверждения отправки ранее сформированного тектса, или отказа от него")
+    await message.reply("Не понимаю Вас. Нажмите выше кнопки Да или Нет, для подтверждения отправки ранее сформированного текста, или отказа от него")
 
 # Ловим все иные непонятные тексты - все оставшиеся
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
