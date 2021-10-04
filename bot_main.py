@@ -290,6 +290,12 @@ async def strange_txt(message: types.Message):
 async def strange_txt(message: types.Message):
     await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
+# Ловим вообще все иное - смайлы, файлы и др.
+@dp.message_handler(content_types=types.ContentType.ANY, state="*") 
+async def strange_txt(message: types.Message):
+    await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
+
+
 #=================================================
 
 
