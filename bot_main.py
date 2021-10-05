@@ -145,16 +145,16 @@ async def process_start_command(message: types.Message):
 #======================== Главное меню
 def get_inline_kb_full():
 	# Генерация клавиатуры Главного меню
-	inline_btn_1 = InlineKeyboardButton('Разместить вакансию', callback_data='btn1')
-	inline_btn_2 = InlineKeyboardButton('Разместить резюме', callback_data='btn2')
+	inline_btn_1 = InlineKeyboardButton('🔎 Разместить вакансию', callback_data='btn1')
+	inline_btn_2 = InlineKeyboardButton('✍ Разместить резюме', callback_data='btn2')
 	inline_kb_full = types.InlineKeyboardMarkup(row_width=2) # можно еще добавить параметры, но толку нет resize_keyboard=True, one_time_keyboard=True
 	inline_kb_full.row(inline_btn_1, inline_btn_2)
-	inline_btn_3 = InlineKeyboardButton('Предложить работы/услуги в сфере закупок', callback_data='btn3')
+	inline_btn_3 = InlineKeyboardButton('⚡ Предложить работы/услуги в сфере закупок', callback_data='btn3')
 	inline_kb_full.add(inline_btn_3)
-	inline_btn_4 = InlineKeyboardButton('Иное сообщение в канал', callback_data='btn4')
+	inline_btn_4 = InlineKeyboardButton('🔔 Иное сообщение в канал', callback_data='btn4')
 	inline_kb_full.add(inline_btn_4)
-	inline_btn_5 = InlineKeyboardButton('Нужна помощь', callback_data='btn5')
-	inline_btn_6 = InlineKeyboardButton('Связаться с админом', callback_data='btn6')
+	inline_btn_5 = InlineKeyboardButton('❓ Нужна помощь', callback_data='btn5')
+	inline_btn_6 = InlineKeyboardButton('☎️ Связаться с админом', callback_data='btn6')
 	inline_kb_full.add(inline_btn_5, inline_btn_6)
 	# inline_kb_full.add(InlineKeyboardButton('На сайт админа', url='https://sukhadol.ru',callback_data='btn7'))
 	return inline_kb_full
