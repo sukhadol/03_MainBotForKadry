@@ -304,7 +304,9 @@ test_chanel = '-1001520498126'
 async def process_post(post: types.Message):
     print('... взяли вот такое сообщение')
     print(post)
-    await bot.send_message(chat_id = test_chanel, text=post, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
+    print('...в нем вот такое содержание')
+    print(post.text)
+    await bot.send_message(chat_id = test_chanel, text=post.text, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
 
 #@bot.on(events.NewMessage(CHAT)) # это функция от еще одного аддона, попробуем без нее
 # async def my_event_handler(event):
