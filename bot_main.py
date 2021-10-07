@@ -299,7 +299,7 @@ async def strange_txt(message: types.Message):
 #=================================================
 #======= а теперь обработка иных сообщений в канале - по факту только от админа
 
-test_chanel = -1001520498126
+test_chanel = -516530210
 @dp.channel_post_handler(chat_id=CHAT)
 async def process_post(post: types.Message):
     print('... взяли вот такое сообщение')
