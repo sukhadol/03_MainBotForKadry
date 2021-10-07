@@ -302,10 +302,9 @@ async def strange_txt(message: types.Message):
 test_chanel = -516530210
 @dp.channel_post_handler(chat_id=CHAT)
 async def process_post(post: types.Message):
-    print('... взяли вот такое сообщение')
-    print(post)
-    print('...в нем вот такое содержание')
-    print(post.text)
+    print('...в сообщении  вот такое содержание')
+    print(post.text) # это собственно содержание сообщения
+    #тут надо добавить фильтры - в каких случаях надо или НЕ надо форвардить размещаемое сообщение
     await bot.send_message(chat_id = test_chanel, text=post.text, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
 
 
