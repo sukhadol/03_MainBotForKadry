@@ -297,6 +297,18 @@ async def strange_txt(message: types.Message):
 
 
 #=================================================
+#======= а теперь обработка иных сообщений в канале - по факту только от админа
+
+test_chanel = -1001520498126
+@dp.channel_post_handler()
+async def process_post(post):
+    await bot.send_message(chat_id = test_chanel, text=post, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
+
+#@bot.on(events.NewMessage(CHAT)) # это функция от еще одного аддона, попробуем без нее
+# async def my_event_handler(event):
+#     print(event.stringify())  # это полный json сообщения
+#     print(event.message.message) # это только текст сообщения
+
 
 
 
