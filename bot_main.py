@@ -308,6 +308,7 @@ async def process_post(post: types.Message):
     print(post.text)
     await bot.send_message(chat_id = test_chanel, text=post.text, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
 
+
 #@bot.on(events.NewMessage(CHAT)) # это функция от еще одного аддона, попробуем без нее
 # async def my_event_handler(event):
 #     print(event.stringify())  # это полный json сообщения
