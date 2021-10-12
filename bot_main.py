@@ -270,10 +270,10 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
                 message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
                 params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
                 requests.get('https://api.vk.com/method/wall.post', params=params)
-                # ниже 2 строчки - для отправки сообщения в ФБ
-                graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook_For_2_month)
+                # ниже 3 строчки - для отправки сообщения в ФБ
+                graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
                 message_to_FB = message_to_VK
-                graph.put_object(group_id, "feed", message=message_to_FB)
+                graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
             await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
         await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     elif codeYN == 2:
@@ -308,13 +308,21 @@ async def strange_txt(message: types.Message):
 #=================================================
 #======= а теперь обработка иных сообщений в канале - по факту только от админа
 
-test_chanel = -516530210
+test_chanel = -516530210 # тестовый канал "02_ЧАТ админский тест"
 @dp.channel_post_handler(chat_id=CHAT)
 async def process_post(post: types.Message):
     print('...в сообщении  вот такое содержание')
     print(post.text) # это собственно содержание сообщения
     #тут надо добавить фильтры - в каких случаях надо или НЕ надо форвардить размещаемое сообщение
-    await bot.send_message(chat_id = test_chanel, text=post.text, parse_mode='Markdown')     # кидаем вообще все в тестовый канал 
+    if(post.text.startswith('Форвард нового сообщения из Фейсбука')):
+        await bot.send_message(chat_id = test_chanel, text="... ... есть форварднутое сообщение из Фейсбука", parse_mode='Markdown')          
+    elif(post.text.startswith('Форвард нового сообщения из ВКонтакте')):
+        await bot.send_message(chat_id = test_chanel, text="... ... есть форварднутое сообщение из ВКонтакте", parse_mode='Markdown')   
+    elif(post.text.startswith('Форвард нового сообщения из Телеграм')):
+        await bot.send_message(chat_id = test_chanel, text="... ... есть форварднутое сообщение из Телеграм", parse_mode='Markdown')          
+    else:
+        await bot.send_message(chat_id = test_chanel, text="... ... есть НОВОЕ сообщение изнутри Телеграм", parse_mode='Markdown')  
+        await bot.send_message(chat_id = test_chanel, text=post.text, parse_mode='Markdown')     # кидаем вообще в тестовый канал "02_ЧАТ админский тест" 
 
 
 #@bot.on(events.NewMessage(CHAT)) # это функция от еще одного аддона, попробуем без нее
