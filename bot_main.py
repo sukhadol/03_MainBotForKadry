@@ -14,7 +14,7 @@ from aiogram.types import ReplyKeyboardRemove, \
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 import os
-
+import facebook
 
 #++++++++++++++++++++++++++++++++++++++++
 
@@ -22,15 +22,19 @@ print ('..====== начали ===== ')
 # Проверка мы работаем на Heroku или локально, сделано собственной переменной в оболочке Heroku
 if 'We_are_on_Heroku' in os.environ:
     Run_On_Heroku = True
-    # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku
+    # Переменные окружения на Heroku: CHAT --- ADMIN_CHAT --- TOKEN --- HEROKU_APP_NAME --- We_are_on_Heroku --- ACCESS_TOKEN_Facebook
     CHAT = os.getenv('CHAT')
     ADMIN_CHAT = os.getenv('ADMIN_CHAT')
     BOT_TOKEN = os.getenv('TOKEN')
     HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
 
-    # теперь переменные для работы с ВК
+    # переменные для работы с ВК
     groupId_in_VK = os.environ.get("groupId_in_VK")
     token_VK_access_token_to_walls = os.environ.get("token_VK_access_token_to_walls")  # Токен ВК с доступом только к wall, для опубликования там сообщений
+
+    # переменные для работы с ФБ
+    ACCESS_TOKEN_Facebook = os.environ.get("ACCESS_TOKEN_Facebook")
+    groupid_in_FB = 1013708529168332
 
     # webhook settings
     WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
@@ -259,12 +263,17 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
             await bot.send_message(chat_id = ADMIN_CHAT, text=full_text, parse_mode='Markdown') 
         else:
             await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-            if codeDO < 3:   # ниже 5 строчек - для отправки сообщения в ВК
+            if codeDO < 3:   
+                # ниже 5 строчек - для отправки сообщения в ВК
                 message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
                 message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
                 message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
                 params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
                 requests.get('https://api.vk.com/method/wall.post', params=params)
+                # ниже 2 строчки - для отправки сообщения в ФБ
+                graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook_For_2_month)
+                message_to_FB = message_to_VK
+                graph.put_object(group_id, "feed", message=message_to_FB)
             await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
         await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     elif codeYN == 2:
