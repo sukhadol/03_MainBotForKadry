@@ -305,14 +305,14 @@ def ADMIN_get_inline_kb_Yes_No():
 	return inline_kb_Yes_No
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
         await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
-        await message.answer(text=f'сообщение от автора :\n\n{message.forward_from.username}', parse_mode='Markdown')
+        await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
 
-        text_of_FORVARD_obiavy = message.text 
-        text_of_FORVARD_obiavy = text_of_FORVARD_obiavy.replace("Переслано", "#ВАКАНСИЯ")   
+        text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
+        #text_of_FORVARD_obiavy = text_of_FORVARD_obiavy.replace("Переслано", "#ВАКАНСИЯ")   
         await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
         await Status.st_ADM_02.set()
         await message.answer("Подтверждаете отправку?",
