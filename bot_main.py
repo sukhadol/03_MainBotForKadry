@@ -81,6 +81,7 @@ class Status (StatesGroup):
     st_00 = State() # начальный статус, ничего не делали
     st_01 = State() # после кнопки Запуск выбрали действие, но пока не ввели подробных данных
     st_02 = State() # ввели все данные для отправки
+    st_ADM_02 = State() # особое состояние общения с Админом
 # для явного задания состояния строка типа этой:
 # await Status.st_00.set()
 # мы явно говорим боту встать в состояние st_00 из группы Status
@@ -287,53 +288,86 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     # Не забываем отчитаться о получении колбэка
     await callback_query.answer()
 
-
-
 # Ловим все иные непонятные тексты - в рамках state=Status.st_02, т.е. когда ввели все данные для отправки
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_02) 
 async def strange_txt(message: types.Message):
     await message.reply("Не понимаю Вас. Нажмите выше кнопки Да или Нет, для подтверждения отправки ранее сформированного текста, или отказа от него")
 
-# Ловим все иные непонятные тексты - все оставшиеся
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
+
+#======================== Меню размещения ФОРВАРДНЫХ постов админом
+
+def ADMIN_get_inline_kb_Yes_No():
+	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
+	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='YNbtn1')
+	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='YNbtn2')
+	inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
+	inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
+	return inline_kb_Yes_No
+
+# Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 | Status.st_01 | Status.st_02) 
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-        await message.reply("о мой администратор")        
+        await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?")   
+        text_of_FORVARD_obiavy = message.text 
+        text_of_FORVARD_obiavy = text_of_FORVARD_obiavy.replace("Переслано", "#ВАКАНСИЯ")   
+        await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
+        await Status.st_ADM_02.set()
+        await message.answer("Подтверждаете отправку?",
+                        reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
 
+# Ловим ответ от АДМИНА
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('YNbtn'), state=Status.st_ADM_02)
+async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin
+    codeYN = callback_query.data[-1]
+    if codeYN.isdigit():
+        codeYN = int(codeYN)
+    await Status.st_00.set()
+    if codeYN == 1:
+        #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
+                # # ниже 5 строчек - для отправки сообщения в ВК
+                # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+                # message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
+                # message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
+                # params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+                # requests.get('https://api.vk.com/method/wall.post', params=params)
+                # # ниже 3 строчки - для отправки сообщения в ФБ
+                # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
+                # message_to_FB = message_to_VK
+                # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
+        await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
+        await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
+    elif codeYN == 2:
+        await bot.send_message(callback_query.from_user.id, f'Отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
+        #await process_start_command()
+        #await Status.st_00.set()
+    else:
+    	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
+    # удаление клавиатуры
+    await callback_query.message.delete_reply_markup() 
+    # Не забываем отчитаться о получении колбэка
+    await callback_query.answer()
 
 
-
-# async def process_start_command(message: types.Message):
-#     if ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
-#         if ((message.from_user.first_name is None) and (message.from_user.last_name is None)):
-#             #whom_say = message.from_user.username
-#             await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-#         else:
-#             if (message.from_user.first_name is None):
-#                 whom_say = message.from_user.last_name
-#                 await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-#             else:
-#                 whom_say = message.from_user.first_name
-#                 await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-#     else:
-#         whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
-#         await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-#     await Status.st_00.set()
-
-
-
+# Ловим все иные непонятные тексты - все оставшиеся
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
+async def strange_txt(message: types.Message):
+    if message.from_user.username == "sukhadol":
+        await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном ")        
+    else:
+        await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
 # Ловим вообще все иное - смайлы, файлы и др.
 @dp.message_handler(content_types=types.ContentType.ANY, state="*") 
 async def strange_txt(message: types.Message):
     await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
-
 #=================================================
-#======= а теперь обработка иных сообщений в канале - по факту только от админа
+#======= а теперь обработка иных сообщений В КАНАЛЕ - по факту только от админа
 
 test_chanel = -516530210 # тестовый канал "02_ЧАТ админский тест"
 @dp.channel_post_handler(chat_id=CHAT)
