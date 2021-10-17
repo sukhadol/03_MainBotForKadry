@@ -311,7 +311,7 @@ async def strange_txt(message: types.Message):
         await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
         await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
-        await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
+       # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
         await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
 
         text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
