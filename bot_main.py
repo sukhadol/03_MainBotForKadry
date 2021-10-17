@@ -310,6 +310,9 @@ async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
         await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
         await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
+        await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
+        await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
+        await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
 
         text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
         #text_of_FORVARD_obiavy = text_of_FORVARD_obiavy.replace("Переслано", "#ВАКАНСИЯ")   
@@ -341,12 +344,9 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
                 # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
                 # message_to_FB = message_to_VK
                 # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
-        await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение размещено в канале') 
-        await bot.send_message(callback_query.from_user.id, f'Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
+        await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     elif codeYN == 2:
-        await bot.send_message(callback_query.from_user.id, f'Отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
-        #await process_start_command()
-        #await Status.st_00.set()
+        await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
     else:
     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
     # удаление клавиатуры
