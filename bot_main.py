@@ -363,7 +363,7 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-        await message.reply("о мой администратор! Просто отлов постов!!")        
+        await message.reply("о мой администратор! Просто отлов постов!! state = " + str(state))        
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
