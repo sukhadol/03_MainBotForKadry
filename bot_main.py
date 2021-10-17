@@ -297,7 +297,34 @@ async def strange_txt(message: types.Message):
 # Ловим все иные непонятные тексты - все оставшиеся
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
 async def strange_txt(message: types.Message):
-    await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
+    if message.from_user.username == "sukhadol":
+        await message.reply("о мой администратор")        
+    else:
+        await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
+
+
+
+
+
+# async def process_start_command(message: types.Message):
+#     if ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
+#         if ((message.from_user.first_name is None) and (message.from_user.last_name is None)):
+#             #whom_say = message.from_user.username
+#             await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+#         else:
+#             if (message.from_user.first_name is None):
+#                 whom_say = message.from_user.last_name
+#                 await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+#             else:
+#                 whom_say = message.from_user.first_name
+#                 await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+#     else:
+#         whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
+#         await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+#     await Status.st_00.set()
+
+
+
 
 # Ловим вообще все иное - смайлы, файлы и др.
 @dp.message_handler(content_types=types.ContentType.ANY, state="*") 
