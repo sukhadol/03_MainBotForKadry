@@ -324,6 +324,7 @@ async def strange_txt(message: types.Message):
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
 
+
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('YNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
