@@ -84,6 +84,7 @@ class Status (StatesGroup):
     st_ADM_02 = State() # особое состояние общения с Админом
 # для явного задания состояния строка типа этой:
 # await Status.st_00.set()
+Status.st_00.set()
 # мы явно говорим боту встать в состояние st_00 из группы Status
 # state = Dispatcher.get_current().current_state()
 
