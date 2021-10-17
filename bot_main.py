@@ -319,8 +319,7 @@ async def strange_txt(message: types.Message):
             text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
             await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
             await Status.st_ADM_02.set()
-            await message.answer("Подтверждаете отправку?",
-                            reply_markup=ADMIN_get_inline_kb_Yes_No()) 
+            await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
