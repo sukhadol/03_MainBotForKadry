@@ -297,73 +297,73 @@ async def strange_txt(message: types.Message):
 
 #======================== Меню размещения ФОРВАРДНЫХ постов админом
 
-def ADMIN_get_inline_kb_Yes_No():
-	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
-	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='AdminYNbtn1')
-	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='AdminYNbtn2')
-	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-	Admin_inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
-	return Admin_inline_kb_Yes_No
+# def ADMIN_get_inline_kb_Yes_No():
+# 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
+# 	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='AdminYNbtn1')
+# 	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='AdminYNbtn2')
+# 	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
+# 	Admin_inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
+# 	return Admin_inline_kb_Yes_No
 
-# Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
-async def strange_txt(message: types.Message):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
-    if message.from_user.username == "sukhadol":
-        if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
-           # await message.reply("о мой администратор! Что-то написано и не распознано!!") 
-            await message.answer("о мой администратор! Что-то написано и не распознано!!") 
-        else:
-            await message.answer('о мой администратор. Это форварднутая вакансия от @' + str(message.forward_from.username) + 'и надо разместить ее в основном канале?') 
-            # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
-            text_of_FORVARD_obiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
-            await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
-            await Status.st_ADM_02.set()
-            await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
-    else:
-        await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
+# # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
+# @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
+# async def strange_txt(message: types.Message):
+#     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
+#     if message.from_user.username == "sukhadol":
+#         if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
+#            # await message.reply("о мой администратор! Что-то написано и не распознано!!") 
+#             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
+#         else:
+#             await message.answer('о мой администратор. Это форварднутая вакансия от @' + str(message.forward_from.username) + 'и надо разместить ее в основном канале?') 
+#             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
+#             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
+#             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
+#             # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
+#             text_of_FORVARD_obiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
+#             await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
+#             await Status.st_ADM_02.set()
+#             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
+#     else:
+#         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
 
 
-# Ловим ответ от АДМИНА
-@dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
-async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
-    codeYN = callback_query.data[-1]
-    if codeYN.isdigit():
-        codeYN = int(codeYN)
-    await Status.st_00.set()
-    if codeYN == 1:
-        #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-                # # ниже 5 строчек - для отправки сообщения в ВК
-                # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
-                # message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
-                # message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
-                # params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
-                # requests.get('https://api.vk.com/method/wall.post', params=params)
-                # # ниже 3 строчки - для отправки сообщения в ФБ
-                # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
-                # message_to_FB = message_to_VK
-                # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
-        await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
-    elif codeYN == 2:
-        await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
-    else:
-    	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
-    # удаление клавиатуры
-    await callback_query.message.delete_reply_markup() 
-    # Не забываем отчитаться о получении колбэка
-    await callback_query.answer()
+# # Ловим ответ от АДМИНА
+# @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
+# async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
+#     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
+#     codeYN = callback_query.data[-1]
+#     if codeYN.isdigit():
+#         codeYN = int(codeYN)
+#     await Status.st_00.set()
+#     if codeYN == 1:
+#         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
+#                 # # ниже 5 строчек - для отправки сообщения в ВК
+#                 # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+#                 # message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
+#                 # message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
+#                 # params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+#                 # requests.get('https://api.vk.com/method/wall.post', params=params)
+#                 # # ниже 3 строчки - для отправки сообщения в ФБ
+#                 # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
+#                 # message_to_FB = message_to_VK
+#                 # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
+#         await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
+#     elif codeYN == 2:
+#         await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
+#     else:
+#     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
+#     # удаление клавиатуры
+#     await callback_query.message.delete_reply_markup() 
+#     # Не забываем отчитаться о получении колбэка
+#     await callback_query.answer()
 
 
 # Ловим все иные непонятные тексты - все оставшиеся
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state="*") 
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-        await message.reply("о мой администратор! Просто отлов постов!! Status = " +  str(Status) + "  state = " + str(Dispatcher.get_current().current_state()))        
+        await message.reply("о мой администратор! Просто отлов постов!!")        
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
