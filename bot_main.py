@@ -306,7 +306,7 @@ def ADMIN_get_inline_kb_Yes_No():
 	return Admin_inline_kb_Yes_No
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
+@dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00) #or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
     if message.from_user.username == "sukhadol":
