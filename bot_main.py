@@ -308,14 +308,13 @@ def ADMIN_get_inline_kb_Yes_No():
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-      #  await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
-      #  await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
+        await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
+        await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
-       # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
+        await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
 
-        text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
-        #text_of_FORVARD_obiavy = text_of_FORVARD_obiavy.replace("Переслано", "#ВАКАНСИЯ")   
+        text_of_FORVARD_obiavy = '*#вакансия от @' + message.forward_from.username + '*\n\n' + message.text 
         await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
         await Status.st_ADM_02.set()
         await message.answer("Подтверждаете отправку?",
