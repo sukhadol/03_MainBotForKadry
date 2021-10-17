@@ -298,36 +298,36 @@ async def strange_txt(message: types.Message):
 
 def ADMIN_get_inline_kb_Yes_No():
 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
-	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='YNbtn1')
-	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='YNbtn2')
-	inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-	inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
-	return inline_kb_Yes_No
+	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='AdminYNbtn1')
+	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='AdminYNbtn2')
+	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
+	Admin_inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
+	return Admin_inline_kb_Yes_No
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-        await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
-       # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
-       # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
-       # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
-       # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
-
-        text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
-        await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
-        await Status.st_ADM_02.set()
-        await message.answer("Подтверждаете отправку?",
-                        reply_markup=ADMIN_get_inline_kb_Yes_No()) 
+        if message.forward_from.username is None:
+            await message.reply("о мой администратор! Что-то написано и не распознано!!") 
+        else:
+            await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
+            # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
+            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
+            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
+            # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
+            text_of_FORVARD_obiavy = '#вакансия от @' + message.forward_from.username + '\n\n' + message.text 
+            await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
+            await Status.st_ADM_02.set()
+            await message.answer("Подтверждаете отправку?",
+                            reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
 
 
 
-
-
 # Ловим ответ от АДМИНА
-@dp.callback_query_handler(lambda c: c.data and c.data.startswith('YNbtn'), state=Status.st_ADM_02)
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin
     codeYN = callback_query.data[-1]
