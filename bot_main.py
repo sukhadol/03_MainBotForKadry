@@ -93,6 +93,7 @@ text_of_obiavy = 'пустой текст объявы'
 full_text = 'пустой суммарный текст'
 codeDO = '0' #переменная, по которой определяем что делать дальше на основе ответа пользователя 
 send_admin = 'No'
+text_of_FORVARD_obiavy = '' # это для форварднутых админом сообщений
 
 # задаем пустой массив для id сообщений, в которых у нас будут инлайн кнопки, чтобы их потом удалять
 list_msg_with_inline = []
@@ -307,12 +308,13 @@ def ADMIN_get_inline_kb_Yes_No():
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
     if message.from_user.username == "sukhadol":
-        if message.forward_from is None:
+        if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
            # await message.reply("о мой администратор! Что-то написано и не распознано!!") 
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
-            await message.answer("о мой администратор. Это вакансия и надо разместить ее в основном?") 
+            await message.answer('о мой администратор. Это форварднутая вакансия от @' + str(message.forward_from.username) + 'и надо разместить ее в основном канале?') 
             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
@@ -329,7 +331,7 @@ async def strange_txt(message: types.Message):
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
     codeYN = callback_query.data[-1]
     if codeYN.isdigit():
         codeYN = int(codeYN)
