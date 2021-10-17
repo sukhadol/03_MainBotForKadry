@@ -309,7 +309,7 @@ def ADMIN_get_inline_kb_Yes_No():
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
         await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
-        await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
+       # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
        # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
