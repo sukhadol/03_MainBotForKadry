@@ -83,8 +83,7 @@ class Status (StatesGroup):
     st_02 = State() # ввели все данные для отправки
     st_ADM_02 = State() # особое состояние общения с Админом
 # для явного задания состояния строка типа этой:
-# await Status.st_00.set()
-Status.st_00.set()
+# await Status.st_00.set() # !!! глюк: в самом начале СТАТУС не встает, остается неопределенным, надо запустить ПОМОЩЬ или START
 # мы явно говорим боту встать в состояние st_00 из группы Status
 # state = Dispatcher.get_current().current_state()
 
@@ -319,7 +318,7 @@ async def strange_txt(message: types.Message):
             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
+            await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
             text_of_FORVARD_obiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
             await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
             await Status.st_ADM_02.set()
