@@ -308,7 +308,7 @@ def ADMIN_get_inline_kb_Yes_No():
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
-        if message.forward_from.username is None:
+        if message.forward_from is None:
             await message.reply("о мой администратор! Что-то написано и не распознано!!") 
         else:
             await message.reply("о мой администратор. Это вакансия и надо разместить ее в основном?") 
