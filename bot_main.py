@@ -203,17 +203,17 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ВАКАНСИЮ') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения вакансии введите ниже ее описание, указав:\n- организацию,\n- город,\n- должность, требования к соискателю и его обязанности,\n- ожидаемое вознаграждение,\n-контакты для связи.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки).\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#ВАКАНСИЯ* от @' + str(callback_query.from_user.username)
+        begining_text = '*#вакансия* от @' + str(callback_query.from_user.username)
     elif codeDO == 2:
         send_admin = 'No'
-        await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ РЕЗЮМЕ') 
+        await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ резюме') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения резюме введите ниже его текст.\n\nВ тексте можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#РЕЗЮМЕ* от @' + str(callback_query.from_user.username)
+        begining_text = '*#резюме* от @' + str(callback_query.from_user.username)
     elif codeDO == 3:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: ПРЕДЛОЖИТЬ УСЛУГИ') 
         await bot.send_message(callback_query.from_user.id, f'Введите описание предлагаемых Вами услуг.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown')  
-        begining_text = '*#УСЛУГИ_В_СФЕРЕ_ЗАКУПОК* от @' + str(callback_query.from_user.username)
+        begining_text = '*#Услуги_в_сфере_закупок* от @' + str(callback_query.from_user.username)
     elif codeDO == 4:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ИНОЕ СООБЩЕНИЕ') 
@@ -283,8 +283,8 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
             if codeDO < 3:   
                 # ниже 5 строчек - для отправки сообщения в ВК
                 message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
-                message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
-                message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
+                message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
+                message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
                 params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
                 requests.get('https://api.vk.com/method/wall.post', params=params)
                 # ниже 3 строчки - для отправки сообщения в ФБ
@@ -314,10 +314,11 @@ async def strange_txt(message: types.Message):
 
 def ADMIN_get_inline_kb_Yes_No():
 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
-	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да', callback_data='AdminYNbtn1')
-	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='AdminYNbtn2')
-	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2)
+	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
+	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
+  	inline_Admin_YNbtn_3 = InlineKeyboardButton('Разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
+	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=3)
+	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
 	return Admin_inline_kb_Yes_No
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
@@ -325,28 +326,16 @@ def ADMIN_get_inline_kb_Yes_No():
 async def strange_txt(message: types.Message):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
     if message.from_user.username == "sukhadol":
-        #await bot.send_message(message.from_user.username, f'Спасибо, чейчас посмотрю') 
-        if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
+        if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
-            #await message.answer('о мой администратор. text - Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?')
-            await message.answer(text=f'о мой администратор. Маркдаун - Это форварднутая вакансия от [{def_to_whom_say(message.forward_from)}](tg://user?id={message.forward_from.id}) и надо разместить ее в основном канале?', parse_mode = 'Markdown') 
-            await message.answer(text=f'о мой администратор. html-1 - Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
-           
-            UsrInfo = message.forward_from
-            await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
-                            "\nUsername: @" + str(UsrInfo.username))
-                            
-            #await message.answer(text=f' Markdown-1 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [*упоМЯнули*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-            #await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.HTML)
-            #await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id=112693084">вручную 112693084</a></strong>', parse_mode = types.ParseMode.HTML)
-
-            #textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
-            #textOfForvardObiavy = '#ВАКАНСИЯ от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
+            #await message.answer(text=f'о мой администратор. Маркдаун - Это форварднутая вакансия от [{def_to_whom_say(message.forward_from)}](tg://user?id={message.forward_from.id}) и надо разместить ее в основном канале?', parse_mode = 'Markdown') 
+            await message.answer(text=f'о мой администратор! Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
+            #textOfForvardObiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
+            #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
-            await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             #  await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-
+            await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
@@ -366,17 +355,19 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
                 # # ниже 5 строчек - для отправки сообщения в ВК
                 # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
-                # message_to_VK = message_to_VK.replace("*#ВАКАНСИЯ*", "#ВАКАНСИЯ")
-                # message_to_VK = message_to_VK.replace("*#РЕЗЮМЕ*", "#РЕЗЮМЕ")
+                # message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
+                # message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
                 # params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
                 # requests.get('https://api.vk.com/method/wall.post', params=params)
                 # # ниже 3 строчки - для отправки сообщения в ФБ
                 # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
                 # message_to_FB = message_to_VK
                 # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
-        await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
+        await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение с ВАКАНСИЕЙ размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     elif codeYN == 2:
         await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
+    elif codeYN == 3:
+        await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение с РЕЗЮМЕ размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     else:
     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
     # удаление клавиатуры
