@@ -55,8 +55,6 @@ if 'We_are_on_Heroku' in os.environ:
     async def on_startup(dp):
         await bot.delete_webhook(dp) 
         await bot.set_webhook(WEBHOOK_URL)
-        
-        #await Status.st_00.set()
         # и дальше все что надо после запуска
 
     async def on_shutdown(dp):
@@ -85,12 +83,9 @@ class Status (StatesGroup):
     st_02 = State() # ввели все данные для отправки
     st_ADM_02 = State() # особое состояние общения с Админом
 # для явного задания состояния строка типа этой:
-# await Status.st_00.set() # !!! глюк: в самом начале СТАТУС не встает, остается неопределенным, надо запустить ПОМОЩЬ или START
+# await Status.st_00.set() # !!! особенность: в самом начале СТАТУС не встает, остается неопределенным, надо запустить ПОМОЩЬ или START
 # мы явно говорим боту встать в состояние st_00 из группы Status
 # state = Dispatcher.get_current().current_state()
-
-# async def on_startup_2(dp):
-#     await Status.st_00.set() 
 
 
 global begining_text, text_of_obiavy, full_text, codeDO, send_admin
