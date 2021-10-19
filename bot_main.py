@@ -317,28 +317,20 @@ async def strange_txt(message: types.Message):
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
             await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
-           # await message.answer('вторая строка: от (link)= @' + str(message.forward_from.link))
-           # await message.answer(' у него (mention_html)= ' + str(message.forward_from.mention_html))
-           # await message.answer(' у него (mention_markdown)=' + str(message.forward_from.mention_markdown))
-           # await message.answer(' у него (name)=' + str(message.forward_from.name))
-
             UsrInfo = message.forward_from
             await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
                             "\nUsername: @" + str(UsrInfo.username))
-            await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
-                            "\nUsername: @" + str(UsrInfo.username))
-            await message.answer(text=f'вначале просто и потом [упомянули](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-
-            # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
-            # await message.answer(text=f' значение поля full_name :\n\n@{message.forward_from.full_name}', parse_mode='Markdown')
+            await message.answer(text=f'вначале просто и потом *[упомянули](tg://user?id={UsrInfo.id})*', parse_mode = 'Markdown')
 
             text_of_obiavy = message.text
+            await message.answer(text=f'text_of_obiavy = {text_of_obiavy}', parse_mode = 'Markdown')
             begining_text = '#вакансия от @' + str(message.forward_from.username) + '\n\n' 
+            await message.answer(text=f'begining_text = {begining_text}', parse_mode = 'Markdown')
             full_text= begining_text+'\n\n'+text_of_obiavy
+            await message.answer(text=f'full_text = {full_text}', parse_mode = 'Markdown')
+            
             text_of_FORVARD_obiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
-            #await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
+            await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
