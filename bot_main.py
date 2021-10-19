@@ -130,7 +130,7 @@ MAIN_KB = ReplyKeyboardMarkup(
                              KeyboardButton(btn_help)
                              )
 
-async def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю
+def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю
     if ((SomeOne.first_name is None) and (SomeOne.last_name is None)):
         if (SomeOne.username is None):
             WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id   
@@ -330,7 +330,7 @@ async def strange_txt(message: types.Message):
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
             # await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
-            await message.answer('о мой администратор. Это форварднутая вакансия от (SomeOne) = ' +  str(def_to_whom_say(message.forward_from)) + ' и надо разместить ее в основном канале?') 
+            await message.answer('о мой администратор. Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?') 
             UsrInfo = message.forward_from
             #await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
             #                "\nUsername: @" + str(UsrInfo.username))
