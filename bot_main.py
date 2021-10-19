@@ -338,6 +338,7 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
 
 
+
             textOfForvardObiavy = '<strong>#вакансия</strong>'  
             print('.... textOfForvardObiavy-1 =')
             print(textOfForvardObiavy)            
