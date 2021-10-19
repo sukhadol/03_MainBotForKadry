@@ -320,17 +320,18 @@ async def strange_txt(message: types.Message):
             UsrInfo = message.forward_from
             await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
                             "\nUsername: @" + str(UsrInfo.username))
-            await message.answer(text=f'вначале просто и потом *[упомянули](tg://user?id={UsrInfo.id})*', parse_mode = 'Markdown')
+            await message.answer(text=f'вначале просто и потом \*[упомянули]\*(tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
 
-            text_of_obiavy = message.text
-            await message.answer(text=f'text_of_obiavy = {text_of_obiavy}', parse_mode = 'Markdown')
-            begining_text = '#вакансия от @' + str(message.forward_from.username) + '\n\n' 
-            await message.answer(text=f'begining_text = {begining_text}', parse_mode = 'Markdown')
-            full_text= begining_text+'\n\n'+text_of_obiavy
-            await message.answer(text=f'full_text = {full_text}', parse_mode = 'Markdown')
+            # text_of_obiavy = message.text
+            # await message.answer(text=f'text_of_obiavy = {text_of_obiavy}', parse_mode = 'Markdown')
+            # begining_text = '#вакансия от @' + str(message.forward_from.username) + '\n\n' 
+            # await message.answer(text=f'begining_text = {begining_text}', parse_mode = 'Markdown')
+            # full_text= begining_text+'\n\n'+text_of_obiavy
+            # await message.answer(text=f'full_text = {full_text}', parse_mode = 'Markdown')
             
-            text_of_FORVARD_obiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
-            #await message.answer(text=f'Итого получаем следующий текст:\n\n{text_of_FORVARD_obiavy}', parse_mode='Markdown')
+            textOfForvardObiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
+            textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
+            await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode='Markdown')
 
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
