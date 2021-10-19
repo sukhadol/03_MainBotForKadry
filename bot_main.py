@@ -312,18 +312,41 @@ async def strange_txt(message: types.Message):
 
 #======================== Меню размещения ФОРВАРДНЫХ постов админом
 
+# def ADMIN_get_inline_kb_Yes_No():
+# 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
+# 	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
+# 	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
+# 	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
+# 	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2)
+#   	#inline_Admin_YNbtn_3 = InlineKeyboardButton('Hf', callback_data='AdminYNbtn3')
+
+#     #inline_Admin_YNbtn_3 = InlineKeyboardButton('Разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
+#     #Admin_inline_kb_Yes_No.add(inline_Admin_YNbtn_3)
+	
+#     #Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
+# 	return Admin_inline_kb_Yes_No
+
+
 def ADMIN_get_inline_kb_Yes_No():
 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
-	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
-	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
+	inline_admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
+	inline_admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
 	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2)
-
-    #inline_Admin_YNbtn_3 = InlineKeyboardButton('Разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
-    #Admin_inline_kb_Yes_No.add(inline_Admin_YNbtn_3)
-	
-    #Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
+	Admin_inline_kb_Yes_No.row(inline_admin_YNbtn_1, inline_admin_YNbtn_2)
+	inline_admin_YNbtn_3 = InlineKeyboardButton('Нет, разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
+	Admin_inline_kb_Yes_No.add(inline_admin_YNbtn_3)
 	return Admin_inline_kb_Yes_No
+
+
+# def get_inline_kb_Yes_No():
+# 	# Генерация клавиатуры меню Yes-No
+# 	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='YNbtn1')
+# 	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='YNbtn2')
+# 	inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
+# 	inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
+# 	inline_YNbtn_3 = InlineKeyboardButton('Ввести новый текст для отправки', callback_data='YNbtn3')
+# 	inline_kb_Yes_No.add(inline_YNbtn_3)
+# 	return inline_kb_Yes_No
 
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
