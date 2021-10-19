@@ -130,6 +130,20 @@ MAIN_KB = ReplyKeyboardMarkup(
                              KeyboardButton(btn_help)
                              )
 
+async def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю
+    if ((SomeOne.first_name is None) and (SomeOne.last_name is None)):
+        if (SomeOne.username is None):
+            WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id   
+        else:
+            WhomToSay = '@' + str(SomeOne.username)
+    elif (SomeOne.first_name is None):
+        WhomToSay = str(SomeOne.last_name)
+    elif (SomeOne.last_name is None):
+        WhomToSay = str(SomeOne.first_name)
+    else:
+        WhomToSay = str(SomeOne.first_name) + ' ' + str(SomeOne.last_name)
+    return WhomToSay
+
 @dp.message_handler(commands=['start'], state="*")
 async def process_start_command(message: types.Message):
     if ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
@@ -313,14 +327,14 @@ async def strange_txt(message: types.Message):
     if message.from_user.username == "sukhadol":
         #await bot.send_message(message.from_user.username, f'Спасибо, чейчас посмотрю') 
         if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
-           # await message.reply("о мой администратор! Что-то написано и не распознано!!") 
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
-            await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
+            # await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
+            await message.answer('о мой администратор. Это форварднутая вакансия от (SomeOne) = ' +  str(def_to_whom_say(message.forward_from)) + ' и надо разместить ее в основном канале?') 
             UsrInfo = message.forward_from
-            await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
-                            "\nUsername: @" + str(UsrInfo.username))
-            await message.answer(text=f'вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным *[упомянули]*(tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
+            #await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
+            #                "\nUsername: @" + str(UsrInfo.username))
+            await message.answer(text=f'вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [*упоМЯнули*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
            
             textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
             textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
