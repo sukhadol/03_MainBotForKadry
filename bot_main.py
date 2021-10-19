@@ -349,12 +349,19 @@ async def strange_txt(message: types.Message):
             textOfForvardObiavy =textOfForvardObiavy  + str(message.forward_from.id) + '\">'
             print('.... textOfForvardObiavy-3 =')
             print(textOfForvardObiavy)
-            await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
             print('.... textOfForvardObiavy-4 =')
-            #await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-            textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
-            print('.... textOfForvardObiavy-4 =')
+            textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' 
             print(textOfForvardObiavy)
+
+            await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+
+            #await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
+            textOfForvardObiavy = textOfForvardObiavy + message.text
+            print('.... textOfForvardObiavy-5 =')
+            print(textOfForvardObiavy)
+            await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+            print('.... иная версия - 6 =')
+           
             await message.answer(text=f'Итого-2 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
             await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
