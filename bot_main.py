@@ -336,7 +336,15 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
             #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
-            textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">'
+
+            textOfForvardObiavy = '<strong>#вакансия</strong>'  
+            print('.... textOfForvardObiavy =')
+            textOfForvardObiavy = textOfForvardObiavy + 'от <strong><a href=\"tg://user?id='
+            #textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' 
+            print('.... textOfForvardObiavy =')
+            textOfForvardObiavy =textOfForvardObiavy  + str(message.forward_from.id) + '\">'
+            print('.... textOfForvardObiavy =')
+            print(textOfForvardObiavy)
             await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
             textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
             await message.answer(text=f'Итого-2 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
