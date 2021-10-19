@@ -312,21 +312,6 @@ async def strange_txt(message: types.Message):
 
 #======================== Меню размещения ФОРВАРДНЫХ постов админом
 
-# def ADMIN_get_inline_kb_Yes_No():
-# 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
-# 	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
-# 	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
-# 	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-# 	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2)
-#   	#inline_Admin_YNbtn_3 = InlineKeyboardButton('Hf', callback_data='AdminYNbtn3')
-
-#     #inline_Admin_YNbtn_3 = InlineKeyboardButton('Разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
-#     #Admin_inline_kb_Yes_No.add(inline_Admin_YNbtn_3)
-	
-#     #Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
-# 	return Admin_inline_kb_Yes_No
-
-
 def ADMIN_get_inline_kb_Yes_No():
 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
 	inline_admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
@@ -336,17 +321,6 @@ def ADMIN_get_inline_kb_Yes_No():
 	inline_admin_YNbtn_3 = InlineKeyboardButton('Нет, разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
 	Admin_inline_kb_Yes_No.add(inline_admin_YNbtn_3)
 	return Admin_inline_kb_Yes_No
-
-
-# def get_inline_kb_Yes_No():
-# 	# Генерация клавиатуры меню Yes-No
-# 	inline_YNbtn_1 = InlineKeyboardButton('Да', callback_data='YNbtn1')
-# 	inline_YNbtn_2 = InlineKeyboardButton('Нет', callback_data='YNbtn2')
-# 	inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=2)
-# 	inline_kb_Yes_No.row(inline_YNbtn_1, inline_YNbtn_2)
-# 	inline_YNbtn_3 = InlineKeyboardButton('Ввести новый текст для отправки', callback_data='YNbtn3')
-# 	inline_kb_Yes_No.add(inline_YNbtn_3)
-# 	return inline_kb_Yes_No
 
 
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
@@ -362,7 +336,10 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
             #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
-            #  await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
+            textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + message.forward_from.id + '\">'
+            await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
+            textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
+            await message.answer(text=f'Итого-2 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
             await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
@@ -381,6 +358,7 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     await Status.st_00.set()
     if codeYN == 1:
         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
+        #await bot.send_message(chat_id = CHAT, text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
                 # # ниже 5 строчек - для отправки сообщения в ВК
                 # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
                 # message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
@@ -395,6 +373,8 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     elif codeYN == 2:
         await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
     elif codeYN == 3:
+
+
         await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение с РЕЗЮМЕ размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     else:
     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeYN={codeYN}')
