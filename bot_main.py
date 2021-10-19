@@ -317,7 +317,11 @@ async def strange_txt(message: types.Message):
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
             await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
-            await message.answer('вторая строка: от (link)= @' + str(message.forward_from.link) + ' у него (mention_html)= ' + str(message.forward_from.mention_html) +  ' у него (mention_markdown)=' + str(message.forward_from.mention_markdown) +  ' у него (name)=' + str(message.forward_from.name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
+            await message.answer('вторая строка: от (link)= @' + str(message.forward_from.link))
+            await message.answer(' у него (mention_html)= ' + str(message.forward_from.mention_html))
+            await message.answer(' у него (mention_markdown)=' + str(message.forward_from.mention_markdown))
+            await message.answer(' у него (name)=' + str(message.forward_from.name))
+
             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_from.forward_sender_name}', parse_mode='Markdown')
