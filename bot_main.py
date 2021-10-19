@@ -311,7 +311,7 @@ def ADMIN_get_inline_kb_Yes_No():
 async def strange_txt(message: types.Message):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
     if message.from_user.username == "sukhadol":
-        await bot.send_message(message.from_user.username, f'Спасибо, чейчас посмотрю') 
+        #await bot.send_message(message.from_user.username, f'Спасибо, чейчас посмотрю') 
         if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
            # await message.reply("о мой администратор! Что-то написано и не распознано!!") 
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
