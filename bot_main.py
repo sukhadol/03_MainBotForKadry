@@ -337,7 +337,7 @@ async def strange_txt(message: types.Message):
             #                "\nUsername: @" + str(UsrInfo.username))
             await message.answer(text=f' Markdown вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [\*упоМЯнули\*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
             await message.answer(text=f' Markdown вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [**упоМЯнули**](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-            await message.answer(text=f' Markdown вначале просто <a href=”tg://user?id={UsrInfo.id}”>гиперссылка</a> и потом жирным <a href=”tg://user?id={UsrInfo.id}”><b>гиперссылка</b></a>', parse_mode = 'html')
+        #    await message.answer(text=f' Markdown вначале просто <a href=”tg://user?id={UsrInfo.id}”>гиперссылка</a> и потом жирным <a href=”tg://user?id={UsrInfo.id}”><b>гиперссылка</b></a>', parse_mode = 'html')
             textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
             textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode='Markdown')
