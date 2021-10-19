@@ -321,6 +321,7 @@ def ADMIN_get_inline_kb_Yes_No():
 	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
 	return Admin_inline_kb_Yes_No
 
+
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
