@@ -330,14 +330,16 @@ async def strange_txt(message: types.Message):
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
             # await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
-            await message.answer('о мой администратор. Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?')
-            await message.answer(text=f'о мой администратор. Это форварднутая вакансия от (SomeOne) = <b>{def_to_whom_say(message.forward_from)}</b> и надо разместить ее в основном канале?', parse_mode = 'html') 
+            await message.answer('о мой администратор. text - Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?')
+            await message.answer(text=f'о мой администратор. html-1 - Это форварднутая вакансия от (SomeOne) = <b>{def_to_whom_say(message.forward_from)}</b> и надо разместить ее в основном канале?', parse_mode = 'html') 
             UsrInfo = message.forward_from
             #await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
             #                "\nUsername: @" + str(UsrInfo.username))
-            await message.answer(text=f' Markdown вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [\*упоМЯнули\*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-            await message.answer(text=f' Markdown вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [**упоМЯнули**](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-        #    await message.answer(text=f' Markdown вначале просто <a href=”tg://user?id={UsrInfo.id}”>гиперссылка</a> и потом жирным <a href=”tg://user?id={UsrInfo.id}”><b>гиперссылка</b></a>', parse_mode = 'html')
+            await message.answer(text=f' Markdown-1 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [\*упоМЯнули\*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
+            await message.answer(text=f' Markdown-2 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [**упоМЯнули**](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
+            await message.answer(text=f' html-1 вначале просто <a href=”tg://user?id={UsrInfo.id}”>гиперссылка</a> вот так', parse_mode = 'html')
+            await message.answer(text=f' html-2 потом жирным <strong><a href=”tg://user?id={UsrInfo.id}”>гиперссылка</a></strong>', parse_mode = 'html')
+            await message.answer(text=f' html-3 отом жирным <a href=”tg://user?id={UsrInfo.id}”><strong>гиперссылка</strong></a>', parse_mode = 'html')
             textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
             textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode='Markdown')
