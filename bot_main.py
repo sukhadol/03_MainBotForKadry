@@ -337,10 +337,17 @@ async def strange_txt(message: types.Message):
                             "\nUsername: @" + str(UsrInfo.username))
             await message.answer(text=f' Markdown-1 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [\*упоМЯнули\*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
             await message.answer(text=f' Markdown-2 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [**упоМЯнули**](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-            await message.answer(text=f' html-0 вначале просто <a href=\tg://user?id=1111111\">гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
-            await message.answer(text=f' html-1 вначале просто <a href=\"tg://user?id={UsrInfo.id}\">гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
-            await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.html)
-            await message.answer(text=f' html-3 отом жирным <a href="tg://user?id={UsrInfo.id}"><strong>гиперссылка</strong></a>', parse_mode = types.ParseMode.html)
+
+            await message.answer("Hello, <b>world</b>!", parse_mode=types.ParseMode.HTML)
+            await message.answer(' html-0 вначале просто <a href=''tg://user?id=1111111''>гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
+            await message.answer(' html-1 вначале просто <a href="tg://user?id={UsrInfo.id}">гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
+            await message.answer(' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.html)
+            await message.answer(' html-3 отом жирным <a href="tg://user?id={UsrInfo.id}"><strong>гиперссылка</strong></a>', parse_mode = types.ParseMode.html)
+
+            await message.answer(text=f' html-0 вначале просто <a href=\"tg://user?id=1111111\">гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
+            # await message.answer(text=f' html-1 вначале просто <a href=\"tg://user?id={UsrInfo.id}\">гиперссылка</a> вот так', parse_mode = types.ParseMode.html)
+            # await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.html)
+            # await message.answer(text=f' html-3 отом жирным <a href="tg://user?id={UsrInfo.id}"><strong>гиперссылка</strong></a>', parse_mode = types.ParseMode.html)
             textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
             textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode='Markdown')
