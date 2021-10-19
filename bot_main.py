@@ -320,7 +320,11 @@ async def strange_txt(message: types.Message):
            # await message.answer('вторая строка: от (link)= @' + str(message.forward_from.link))
            # await message.answer(' у него (mention_html)= ' + str(message.forward_from.mention_html))
            # await message.answer(' у него (mention_markdown)=' + str(message.forward_from.mention_markdown))
-            await message.answer(' у него (name)=' + str(message.forward_from.name))
+           # await message.answer(' у него (name)=' + str(message.forward_from.name))
+
+            UsrInfo = message.forward_from
+            await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
+                            "\nUsername: @" + str(UsrInfo.username))
 
             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
