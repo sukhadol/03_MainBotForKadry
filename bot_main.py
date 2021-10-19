@@ -327,7 +327,7 @@ async def strange_txt(message: types.Message):
                             "\nUsername: @" + str(UsrInfo.username))
             await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
                             "\nUsername: @" + str(UsrInfo.username))
-            await message.answer(text='вначале просто и потом [упомянули](tg://user?id=UsrInfo.id)', parse_mode = 'Markdown')
+            await message.answer(text=f'вначале просто и потом [упомянули](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
 
             # await message.answer(text=f'сообщение от автора :\n\n@{message.forward_from.username}', parse_mode='Markdown')
             # await message.answer(text=f' значение поля forward_sender_name :\n\n@{message.forward_sender_name}', parse_mode='Markdown')
