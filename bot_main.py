@@ -317,7 +317,7 @@ def ADMIN_get_inline_kb_Yes_No():
 	inline_Admin_YNbtn_1 = InlineKeyboardButton('Да, ВАКАНСИЯ', callback_data='AdminYNbtn1')
 	inline_Admin_YNbtn_2 = InlineKeyboardButton('Нет, НЕ РАЗМЕЩАТЬ', callback_data='AdminYNbtn2')
   	inline_Admin_YNbtn_3 = InlineKeyboardButton('Разместить как РЕЗЮМЕ', callback_data='AdminYNbtn3')
-	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=3)
+	Admin_inline_kb_Yes_No = types.InlineKeyboardMarkup(row_width=1)
 	Admin_inline_kb_Yes_No.row(inline_Admin_YNbtn_1, inline_Admin_YNbtn_2, inline_Admin_YNbtn_3)
 	return Admin_inline_kb_Yes_No
 
