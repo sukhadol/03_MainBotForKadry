@@ -337,6 +337,7 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
 
+
             textOfForvardObiavy = '<strong>#вакансия</strong>'  
             print('.... textOfForvardObiavy =')
             textOfForvardObiavy = textOfForvardObiavy + 'от <strong><a href=\"tg://user?id='
