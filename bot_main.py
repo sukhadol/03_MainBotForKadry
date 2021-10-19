@@ -20,16 +20,7 @@ import facebook
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-# Объявляем варианты состояния конечных автоматов (FSM — Finite State Machine)
-class Status (StatesGroup):
-    st_00 = State() # начальный статус, ничего не делали
-    st_01 = State() # после кнопки Запуск выбрали действие, но пока не ввели подробных данных
-    st_02 = State() # ввели все данные для отправки
-    st_ADM_02 = State() # особое состояние общения с Админом
-# для явного задания состояния строка типа этой:
-# await Status.st_00.set() # !!! глюк: в самом начале СТАТУС не встает, остается неопределенным, надо запустить ПОМОЩЬ или START
-# мы явно говорим боту встать в состояние st_00 из группы Status
-# state = Dispatcher.get_current().current_state()
+
 
 #++++++++++++++++++++++++++++++++++++++++
 
@@ -66,6 +57,16 @@ if 'We_are_on_Heroku' in os.environ:
     storage=MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
 
+    # Объявляем варианты состояния конечных автоматов (FSM — Finite State Machine)
+    class Status (StatesGroup):
+        st_00 = State() # начальный статус, ничего не делали
+        st_01 = State() # после кнопки Запуск выбрали действие, но пока не ввели подробных данных
+        st_02 = State() # ввели все данные для отправки
+        st_ADM_02 = State() # особое состояние общения с Админом
+    # для явного задания состояния строка типа этой:
+    # await Status.st_00.set() # !!! глюк: в самом начале СТАТУС не встает, остается неопределенным, надо запустить ПОМОЩЬ или START
+    # мы явно говорим боту встать в состояние st_00 из группы Status
+    # state = Dispatcher.get_current().current_state()
 
     async def on_startup(dp):
         await bot.delete_webhook(dp) 
