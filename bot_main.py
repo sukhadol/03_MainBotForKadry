@@ -329,23 +329,22 @@ async def strange_txt(message: types.Message):
         if message.forward_from is None: # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
-            # await message.answer('о мой администратор. Это форварднутая вакансия от (username)= @' + str(message.forward_from.username) + ' у него (id)= ' + str(message.forward_from.id) +  ' у него (first_name)=' + str(message.forward_from.first_name) +  ' у него (last_name)=' + str(message.forward_from.last_name) +  ' у него (full_name)=' + str(message.forward_from.full_name) + ' и надо разместить ее в основном канале?') 
-            await message.answer('о мой администратор. text - Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?')
-            await message.answer(text=f'о мой администратор. html-1 - Это форварднутая вакансия от (SomeOne) = <b>{def_to_whom_say(message.forward_from)}</b> и надо разместить ее в основном канале?', parse_mode = 'html') 
+            #await message.answer('о мой администратор. text - Это форварднутая вакансия от (SomeOne) = ' +  def_to_whom_say(message.forward_from) + ' и надо разместить ее в основном канале?')
+            await message.answer(text=f'о мой администратор. Маркдаун - Это форварднутая вакансия от [{def_to_whom_say(message.forward_from)}](tg://user?id={message.forward_from.id}) и надо разместить ее в основном канале?', parse_mode = 'Markdown') 
+            await message.answer(text=f'о мой администратор. html-1 - Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
+           
             UsrInfo = message.forward_from
             await message.answer("Id: " + str(UsrInfo.id) + "\nFirst Name: " + str(UsrInfo.first_name) + "\nLast Name: " + str(UsrInfo.last_name) +
                             "\nUsername: @" + str(UsrInfo.username))
                             
-            await message.answer(text=f' Markdown-1 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [*упоМЯнули*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
-
-            await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.HTML)
-            await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id=112693084">вручную 112693084</a></strong>', parse_mode = types.ParseMode.HTML)
+            #await message.answer(text=f' Markdown-1 вначале просто [упомянули](tg://user?id={UsrInfo.id}) и потом жирным [*упоМЯнули*](tg://user?id={UsrInfo.id})', parse_mode = 'Markdown')
+            #await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id={UsrInfo.id}">гиперссылка</a></strong>', parse_mode = types.ParseMode.HTML)
+            #await message.answer(text=f' html-2 потом жирным <strong><a href="tg://user?id=112693084">вручную 112693084</a></strong>', parse_mode = types.ParseMode.HTML)
 
             #textOfForvardObiavy = '#ВАКАНСИЯ от @' + str(message.forward_from.username) + '\n\n' + message.text 
-
             #textOfForvardObiavy = '#ВАКАНСИЯ от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
-            await message.answer(text=f'Итого получаем следующий текст:\n\n#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
+            await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             #  await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
 
             await Status.st_ADM_02.set()
