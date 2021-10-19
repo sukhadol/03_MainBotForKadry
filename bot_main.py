@@ -345,7 +345,7 @@ async def strange_txt(message: types.Message):
 
             #textOfForvardObiavy = '#ВАКАНСИЯ от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
-            await message.answer(text=f'Итого получаем следующий текст:\n\n#ВАКАНСИЯ от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
+            await message.answer(text=f'Итого получаем следующий текст:\n\n#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             #  await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
 
             await Status.st_ADM_02.set()
