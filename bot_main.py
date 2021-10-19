@@ -346,6 +346,7 @@ async def strange_txt(message: types.Message):
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode='Markdown')
 
 
+
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
