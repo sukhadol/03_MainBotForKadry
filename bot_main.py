@@ -94,7 +94,7 @@ text_of_obiavy = 'пустой текст объявы'
 full_text = 'пустой суммарный текст'
 codeDO = '0' #переменная, по которой определяем что делать дальше на основе ответа пользователя 
 send_admin = 'No'
-text_of_FORVARD_obiavy = '' # это для форварднутых админом сообщений
+textOfForvardObiavy = '' # это для форварднутых админом сообщений
 
 # задаем пустой массив для id сообщений, в которых у нас будут инлайн кнопки, чтобы их потом удалять
 list_msg_with_inline = []
@@ -326,7 +326,7 @@ def ADMIN_get_inline_kb_Yes_No():
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavy
     if message.from_user.username == "sukhadol":
         if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
@@ -339,31 +339,36 @@ async def strange_txt(message: types.Message):
 
 
 
-            textOfForvardObiavy = '<strong>#вакансия</strong>'  
-            print('.... textOfForvardObiavy-1 =')
-            print(textOfForvardObiavy)            
-            textOfForvardObiavy = textOfForvardObiavy + ' от <strong><a href=\"tg://user?id='
-            #textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' 
-            print('.... textOfForvardObiavy-2 =')
-            print(textOfForvardObiavy)
-            textOfForvardObiavy =textOfForvardObiavy  + str(message.forward_from.id) + '\">'
-            print('.... textOfForvardObiavy-3 =')
-            print(textOfForvardObiavy)
-            print('.... textOfForvardObiavy-4 =')
-            textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' 
-            print(textOfForvardObiavy)
+            # textOfForvardObiavy = '<strong>#вакансия</strong>'  
+            # print('.... textOfForvardObiavy-1 =')
+            # print(textOfForvardObiavy)            
+            # textOfForvardObiavy = textOfForvardObiavy + ' от <strong><a href=\"tg://user?id='
+            # #textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' 
+            # print('.... textOfForvardObiavy-2 =')
+            # print(textOfForvardObiavy)
+            # textOfForvardObiavy =textOfForvardObiavy  + str(message.forward_from.id) + '\">'
+            # print('.... textOfForvardObiavy-3 =')
+            # print(textOfForvardObiavy)
+            # print('.... textOfForvardObiavy-4 =')
+            # textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' 
+            # print(textOfForvardObiavy)
+            # await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+            # #await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
+            # textOfForvardObiavy = textOfForvardObiavy + message.text
+            # print('.... textOfForvardObiavy-5 =')
+            # print(textOfForvardObiavy)
+            # await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+            # print('.... иная версия - 6 =')
+           # ++++++++++++++++++++
 
-            await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-
-            #await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-            textOfForvardObiavy = textOfForvardObiavy + message.text
+            textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
             print('.... textOfForvardObiavy-5 =')
             print(textOfForvardObiavy)
             await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
             print('.... иная версия - 6 =')
-           
-            await message.answer(text=f'Итого-2 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-            await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
+
+            await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
+            #await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
@@ -376,14 +381,14 @@ async def strange_txt(message: types.Message):
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, text_of_FORVARD_obiavy
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavy
     codeYN = callback_query.data[-1]
     if codeYN.isdigit():
         codeYN = int(codeYN)
     await Status.st_00.set()
     if codeYN == 1:
         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-        #await bot.send_message(chat_id = CHAT, text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
+        #await bot.send_message(chat_id = CHAT, text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
                 # # ниже 5 строчек - для отправки сообщения в ВК
                 # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
                 # message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
