@@ -133,16 +133,21 @@ MAIN_KB = ReplyKeyboardMarkup(
 def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю
     if ((SomeOne.first_name is None) and (SomeOne.last_name is None)):
         if (SomeOne.username is None):
-            WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id   
+            WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id 
+            JustIdYNo = 'Yes'  
         else:
             WhomToSay = '@' + str(SomeOne.username)
+            JustIdYNo = 'No'
     elif (SomeOne.first_name is None):
         WhomToSay = str(SomeOne.last_name)
+        JustIdYNo = 'No'
     elif (SomeOne.last_name is None):
         WhomToSay = str(SomeOne.first_name)
+        JustIdYNo = 'No'
     else:
         WhomToSay = str(SomeOne.first_name) + ' ' + str(SomeOne.last_name)
-    return WhomToSay
+        JustIdYNo = 'No'
+    return [WhomToSay, JustIdYNo]
 
 @dp.message_handler(commands=['start'], state="*")
 async def process_start_command(message: types.Message):
@@ -331,14 +336,13 @@ async def strange_txt(message: types.Message):
         if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
         else:
-            #await message.answer(text=f'о мой администратор. Маркдаун - Это форварднутая вакансия от [{def_to_whom_say(message.forward_from)}](tg://user?id={message.forward_from.id}) и надо разместить ее в основном канале?', parse_mode = 'Markdown') 
-            await message.answer(text=f'о мой администратор! Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
-            #textOfForvardObiavy = '#вакансия от @' + str(message.forward_from.username) + '\n\n' + message.text 
-            #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
-            #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
+            await message.answer(text=f'о мой администратор! Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)[0]}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
 
-            textOfForvardObiavyHtml = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
-            textOfForvardObiavyPlain = '#вакансия от [tg://user?id=' + str(message.forward_from.id) + '|' + def_to_whom_say(message.forward_from) + '] \n\n' + message.text
+            textOfForvardObiavyHtml = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from)[0] + '</a></strong>\n\n' + message.text
+            if def_to_whom_say(message.forward_from)[0] == 'Yes':
+                textOfForvardObiavyPlain = '#вакансия' '\n\n' + message.text                
+            else:
+                textOfForvardObiavyPlain = '#вакансия от ' + def_to_whom_say(message.forward_from)[0] + '\n\n' + message.text
 
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavyHtml}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
