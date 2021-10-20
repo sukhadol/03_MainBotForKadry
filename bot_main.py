@@ -337,35 +337,11 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
 
-
-
-            # textOfForvardObiavy = '<strong>#вакансия</strong>'  
-            # print('.... textOfForvardObiavy-1 =')
-            # print(textOfForvardObiavy)            
-            # textOfForvardObiavy = textOfForvardObiavy + ' от <strong><a href=\"tg://user?id='
-            # #textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' 
-            # print('.... textOfForvardObiavy-2 =')
-            # print(textOfForvardObiavy)
-            # textOfForvardObiavy =textOfForvardObiavy  + str(message.forward_from.id) + '\">'
-            # print('.... textOfForvardObiavy-3 =')
-            # print(textOfForvardObiavy)
-            # print('.... textOfForvardObiavy-4 =')
-            # textOfForvardObiavy = textOfForvardObiavy + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' 
-            # print(textOfForvardObiavy)
-            # await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-            # #await message.answer(text=f'Итого-1 получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-            # textOfForvardObiavy = textOfForvardObiavy + message.text
-            # print('.... textOfForvardObiavy-5 =')
-            # print(textOfForvardObiavy)
-            # await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-            # print('.... иная версия - 6 =')
-           # ++++++++++++++++++++
-
             textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
-            print('.... textOfForvardObiavy-5 =')
-            print(textOfForvardObiavy)
-            await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-            print('.... иная версия - 6 =')
+            #print('.... textOfForvardObiavy-5 =')
+            #print(textOfForvardObiavy)
+            #await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+            #print('.... иная версия - 6 =')
 
             await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
             #await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
@@ -389,12 +365,12 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     if codeYN == 1:
         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
         #await bot.send_message(chat_id = CHAT, text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-                # # ниже 5 строчек - для отправки сообщения в ВК
-                # message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
-                # message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
-                # message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
-                # params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
-                # requests.get('https://api.vk.com/method/wall.post', params=params)
+        # ниже 5 строчек - для отправки сообщения в ВК
+        message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + textOfForvardObiavy + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+        #message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
+        #message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
+        params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+        requests.get('https://api.vk.com/method/wall.post', params=params)
                 # # ниже 3 строчки - для отправки сообщения в ФБ
                 # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
                 # message_to_FB = message_to_VK
