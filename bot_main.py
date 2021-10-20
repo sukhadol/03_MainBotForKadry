@@ -334,13 +334,13 @@ async def strange_txt(message: types.Message):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
     if message.from_user.username == "sukhadol":
         if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
-            await message.answer("о мой администратор! Что-то написано и не распознано!!") 
+            await message.answer("о мой администратор! Что-то написано и не распознано!! (возможно у пользователя скрыта инфа о себе)") 
         else:
             await message.answer(text=f'о мой администратор! Это форварднутая вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)[0]}</a></strong> и надо разместить ее в основном канале?', parse_mode = 'html') 
 
             textOfForvardObiavyHtml = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from)[0] + '</a></strong>\n\n' + message.text
-            if def_to_whom_say(message.forward_from)[0] == 'Yes':
-                textOfForvardObiavyPlain = '#вакансия' '\n\n' + message.text                
+            if def_to_whom_say(message.forward_from)[1] == 'Yes': # т.е. в случае если у пользователя не открыты не имя ни фамилия (JustIdYNo = 'Yes'), а знаем только его id - то вовне Телеграма убираем его ФИО (точнее, убираем отображение id)
+                textOfForvardObiavyPlain = '#вакансия\n\n' + message.text                
             else:
                 textOfForvardObiavyPlain = '#вакансия от ' + def_to_whom_say(message.forward_from)[0] + '\n\n' + message.text
 
@@ -349,10 +349,6 @@ async def strange_txt(message: types.Message):
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
         await message.reply("Не понимаю Вас. Нажмите /begin для открытия основного меню")
-
-
-
-
 
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
@@ -363,23 +359,30 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
         codeYN = int(codeYN)
     await Status.st_00.set()
     if codeYN == 1:
-        #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-        #await bot.send_message(chat_id = CHAT, text=textOfForvardObiavyHtml, parse_mode=types.ParseMode.HTML)
+        await bot.send_message(chat_id = CHAT, text=textOfForvardObiavyHtml, parse_mode=types.ParseMode.HTML)
         # ниже 5 строчек - для отправки сообщения в ВК
         message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + textOfForvardObiavyPlain + '\n\nИсточник:\nhttps://t.me/jobzakupki')
-        #message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
-        #message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
         params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
         requests.get('https://api.vk.com/method/wall.post', params=params)
-                # # ниже 3 строчки - для отправки сообщения в ФБ
-                # graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
-                # message_to_FB = message_to_VK
-                # graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
+        # ниже 3 строчки - для отправки сообщения в ФБ
+        graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
+        message_to_FB = message_to_VK
+        graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
         await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение с ВАКАНСИЕЙ размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     elif codeYN == 2:
         await bot.send_message(callback_query.from_user.id, f'АДМИН, отправка отменена. Но если хотите, можно начать еще раз. Для этого нажмите внизу кнопку \"Запуск\" или введите команду /begin') 
     elif codeYN == 3:
-
+        textOfForvardObiavyHtml = textOfForvardObiavyHtml.replace("#вакансия", "#резюме")
+        await bot.send_message(chat_id = CHAT, text=textOfForvardObiavyHtml, parse_mode=types.ParseMode.HTML)
+        # ниже 5 строчек - для отправки сообщения в ВК
+        textOfForvardObiavyPlain = textOfForvardObiavyPlain.replace("#вакансия", "#резюме")
+        message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + textOfForvardObiavyPlain + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+        params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
+        requests.get('https://api.vk.com/method/wall.post', params=params)
+        # ниже 3 строчки - для отправки сообщения в ФБ
+        graph = facebook.GraphAPI(ACCESS_TOKEN_Facebook)
+        message_to_FB = message_to_VK
+        graph.put_object(groupid_in_FB, "feed", message=message_to_FB)
 
         await bot.send_message(callback_query.from_user.id, f'АДМИН, спасибо, сообщение с РЕЗЮМЕ размещено в канале. Чем-то еще могу помочь? Например, если хотите, можно начать еще раз. Для этого нажмите внизу кнопку "Запуск" или введите команду /begin \nИли можете перейти в один из каналов:\n https://t.me/InterfaxProZakupkiNews \n https://t.me/jobzakupki\n\nP.S.Если внизу пропали кнопки ЗАПУСК и ПОМОЩЬ - введите /start и нажмите Enter') 
     else:
