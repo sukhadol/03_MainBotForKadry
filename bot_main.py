@@ -326,7 +326,7 @@ def ADMIN_get_inline_kb_Yes_No():
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavy
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
     if message.from_user.username == "sukhadol":
         if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!!") 
@@ -337,14 +337,10 @@ async def strange_txt(message: types.Message):
             #textOfForvardObiavy = '#вакансия от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n' + message.text 
             #textOfForvardObiavy = textOfForvardObiavy.replace("_", "\_")
 
-            textOfForvardObiavy = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
-            #print('.... textOfForvardObiavy-5 =')
-            #print(textOfForvardObiavy)
-            #await message.answer(text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
-            #print('.... иная версия - 6 =')
+            textOfForvardObiavyHtml = '<strong>#вакансия</strong> от <strong><a href=\"tg://user?id=' + str(message.forward_from.id) + '\">' + def_to_whom_say(message.forward_from) + '</a></strong>\n\n' + message.text
+            textOfForvardObiavyPlain = '#вакансия от [href=\"tg://user?id=' + str(message.forward_from.id) + '|' + def_to_whom_say(message.forward_from) + '] \n\n' + message.text
 
-            await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavy}', parse_mode=types.ParseMode.HTML)
-            #await message.answer(text=f'Итого получаем следующий текст:\n\n<strong>#вакансия</strong> от <strong><a href="tg://user?id={message.forward_from.id}">{def_to_whom_say(message.forward_from)}</a></strong>\n\n{message.text}', parse_mode=types.ParseMode.HTML)
+            await message.answer(text=f'Итого получаем следующий текст:\n\n{textOfForvardObiavyHtml}', parse_mode=types.ParseMode.HTML)
             await Status.st_ADM_02.set()
             await message.answer("Подтверждаете отправку?", reply_markup=ADMIN_get_inline_kb_Yes_No()) 
     else:
@@ -357,16 +353,16 @@ async def strange_txt(message: types.Message):
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavy
+    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
     codeYN = callback_query.data[-1]
     if codeYN.isdigit():
         codeYN = int(codeYN)
     await Status.st_00.set()
     if codeYN == 1:
         #await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
-        #await bot.send_message(chat_id = CHAT, text=textOfForvardObiavy, parse_mode=types.ParseMode.HTML)
+        #await bot.send_message(chat_id = CHAT, text=textOfForvardObiavyHtml, parse_mode=types.ParseMode.HTML)
         # ниже 5 строчек - для отправки сообщения в ВК
-        message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + textOfForvardObiavy + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+        message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + textOfForvardObiavyPlain + '\n\nИсточник:\nhttps://t.me/jobzakupki')
         #message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
         #message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
         params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
