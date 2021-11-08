@@ -152,20 +152,27 @@ def def_to_whom_say(SomeOne): # подпрограмма чтобы понима
 
 @dp.message_handler(commands=['start'], state="*")
 async def process_start_command(message: types.Message):
-    if ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
-        if ((message.from_user.first_name is None) and (message.from_user.last_name is None)):
-            #whom_say = message.from_user.username
-            await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-        else:
-            if (message.from_user.first_name is None):
-                whom_say = message.from_user.last_name
-                await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-            else:
-                whom_say = message.from_user.first_name
-                await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
-    else:
-        whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
-        await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+    #def_to_whom_say(message.from_user)
+    text_from_to_send = '[' + def_to_whom_say(message.from_user)[0] + '](tg://user?id=' + str(message.from_user.id) # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    await message.answer(f'Привет, {text_from_to_send}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+ 
+
+    # if (message.from_user.username is None):
+    #     #fff
+    # elif ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
+    #     if ((message.from_user.first_name is None) and (message.from_user.last_name is None)):
+    #         #whom_say = message.from_user.username
+    #         await message.answer(f'Привет, @{message.from_user.username}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+    #     else:
+    #         if (message.from_user.first_name is None):
+    #             whom_say = message.from_user.last_name
+    #             await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+    #         else:
+    #             whom_say = message.from_user.first_name
+    #             await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
+    # else:
+    #     whom_say = message.from_user.first_name + ' ' + message.from_user.last_name
+    #     await message.answer(f'Привет, {whom_say} (@{message.from_user.username})!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB)
     await Status.st_00.set()
 
 
