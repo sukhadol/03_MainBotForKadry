@@ -130,10 +130,11 @@ MAIN_KB = ReplyKeyboardMarkup(
                              KeyboardButton(btn_help)
                              )
 
-def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю
+def def_to_whom_say(SomeOne): # подпрограмма чтобы понимать как обращаться к пользователю. Возвращает WhomToSay (как зовут или id), JustIdYNo (понимание, что содержится в WhomToSay - имя или id)
     if ((SomeOne.first_name is None) and (SomeOne.last_name is None)):
         if (SomeOne.username is None):
-            WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id 
+            #WhomToSay = str(SomeOne.id) # т.е. когда вообще все неизвестно, и значит остается только id 
+            WhomToSay = 'ИмяСкрытоПользователем' # т.е. когда вообще все неизвестно, и значит остается только id 
             JustIdYNo = 'Yes'  
         else:
             WhomToSay = '@' + str(SomeOne.username)
@@ -202,23 +203,27 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
     global begining_text, text_of_obiavy, full_text, codeDO, send_admin
     await Status.st_01.set()
     codeDO = callback_query.data[-1]  # сформировали команду что будем дальше делать
+    #text_from_to_send_part = <a href="tg://user?id={callback_query.from_user.id}">{def_to_whom_say(callback_query.from_user)[0]}</a> # это такой формат гиперссылки при маркдауне HTML далее работает 
+    text_from_to_send = '[' + def_to_whom_say(callback_query.from_user)[0] + '](tg://user?id=' + str(callback_query.from_user.id) # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+
+    #text_from_to_send = '@' + str(callback_query.from_user.username) # здесь пока поставили username, но на самом деле он не всегда есть у пользователя
     if codeDO.isdigit():
         codeDO = int(codeDO)
     if codeDO == 1:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ВАКАНСИЮ') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения вакансии введите ниже ее описание, указав:\n- организацию,\n- город,\n- должность, требования к соискателю и его обязанности,\n- ожидаемое вознаграждение,\n-контакты для связи.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки).\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#вакансия* от @' + str(callback_query.from_user.username)
+        begining_text = '*#вакансия* от ' + text_from_to_send
     elif codeDO == 2:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ резюме') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения резюме введите ниже его текст.\n\nВ тексте можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#резюме* от @' + str(callback_query.from_user.username)
+        begining_text = '*#резюме* от ' + text_from_to_send
     elif codeDO == 3:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: ПРЕДЛОЖИТЬ УСЛУГИ') 
         await bot.send_message(callback_query.from_user.id, f'Введите описание предлагаемых Вами услуг.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown')  
-        begining_text = '*#Услуги_в_сфере_закупок* от @' + str(callback_query.from_user.username)
+        begining_text = '*#Услуги_в_сфере_закупок* от ' + text_from_to_send
     elif codeDO == 4:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ИНОЕ СООБЩЕНИЕ') 
@@ -231,7 +236,7 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
         send_admin = 'Yes'
         await bot.send_message(callback_query.from_user.id, f'Вы выбрали:\nНАПРАВИТЬ СООБЩЕНИЕ АДМИНИСТРАТОРАМ КАНАЛА') 
         await bot.send_message(callback_query.from_user.id, f'Введите текст сообщение') 
-        begining_text = 'СООБЩЕНИЕ АДМИНИСТРАТОРАМ от @' + str(callback_query.from_user.username)
+        begining_text = 'СООБЩЕНИЕ АДМИНИСТРАТОРАМ от ' + text_from_to_send
     else:
         #await bot.answer_callback_query(callback_query.id)
     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeDO={codeDO}')
