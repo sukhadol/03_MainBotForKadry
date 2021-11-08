@@ -159,6 +159,7 @@ async def process_start_command(message: types.Message):
     await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
  
 
+
     # if (message.from_user.username is None):
     #     #fff
     # elif ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
