@@ -154,7 +154,7 @@ def def_to_whom_say(SomeOne): # подпрограмма чтобы понима
 async def process_start_command(message: types.Message):
     #def_to_whom_say(message.from_user)
     text_from_to_send = '[' + def_to_whom_say(message.from_user)[0] + '](tg://user?id=' + str(message.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
-    await message.answer(f'Привет, {text_from_to_send}!\n Начинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
+    await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
  
 
     # if (message.from_user.username is None):
@@ -211,7 +211,7 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
     await Status.st_01.set()
     codeDO = callback_query.data[-1]  # сформировали команду что будем дальше делать
     #text_from_to_send_part = <a href="tg://user?id={callback_query.from_user.id}">{def_to_whom_say(callback_query.from_user)[0]}</a> # это такой формат гиперссылки при маркдауне HTML далее работает 
-    text_from_to_send = '[' + def_to_whom_say(callback_query.from_user)[0] + '](tg://user?id=' + str(callback_query.from_user.id) # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    text_from_to_send = '[' + def_to_whom_say(callback_query.from_user)[0] + '](tg://user?id=' + str(callback_query.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
 
     #text_from_to_send = '@' + str(callback_query.from_user.username) # здесь пока поставили username, но на самом деле он не всегда есть у пользователя
     if codeDO.isdigit():
