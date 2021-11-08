@@ -158,7 +158,7 @@ async def process_start_command(message: types.Message):
     print(message.from_user.id)
     print ('...text_from_to_send = ')
     print(text_from_to_send)
-    await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу-2 tg://user?id=' + str(message.from_user.id), parse_mode='Markdown')
+   # await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу-2 tg://user?id=' + str(message.from_user.id), parse_mode='Markdown')
     await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
  
 
@@ -241,7 +241,7 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ИНОЕ СООБЩЕНИЕ') 
         await bot.send_message(callback_query.from_user.id, f'Введите свое сообщение.\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.') 
-        begining_text = 'Сообщение от @' + str(callback_query.from_user.username)
+        begining_text = 'Сообщение от ' + text_from_to_send
     elif codeDO == 5:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, help_message, disable_web_page_preview=True) 
