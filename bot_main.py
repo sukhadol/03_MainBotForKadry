@@ -154,6 +154,8 @@ def def_to_whom_say(SomeOne): # подпрограмма чтобы понима
 async def process_start_command(message: types.Message):
     #def_to_whom_say(message.from_user)
     text_from_to_send = '[' + def_to_whom_say(message.from_user)[0] + '](tg://user?id=' + str(message.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    print ('...from_user.id = ')
+    print(message.from_user.id)
     await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
  
 
