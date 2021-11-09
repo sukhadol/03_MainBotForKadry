@@ -88,10 +88,12 @@ class Status (StatesGroup):
 # state = Dispatcher.get_current().current_state()
 
 
-global begining_text, text_of_obiavy, full_text, codeDO, send_admin
+global begining_text, text_of_obiavy, text_from_to_telegram, text_from_to_export, full_text_telegram, full_text_export, codeDO, send_admin
+# еще есть переменные textOfForvardObiavyHtml, textOfForvardObiavyPlain - они только в разделе ловли форварда из иных каналов
 begining_text = 'пустое начало'
 text_of_obiavy = 'пустой текст объявы'
-full_text = 'пустой суммарный текст'
+full_text_telegram = 'пустой суммарный текст'
+full_text_export = 'пустой суммарный текст'
 codeDO = '0' #переменная, по которой определяем что делать дальше на основе ответа пользователя 
 send_admin = 'No'
 textOfForvardObiavy = '' # это для форварднутых админом сообщений
@@ -153,16 +155,16 @@ def def_to_whom_say(SomeOne): # подпрограмма чтобы понима
 @dp.message_handler(commands=['start'], state="*")
 async def process_start_command(message: types.Message):
     #def_to_whom_say(message.from_user)
-    text_from_to_send = '[' + def_to_whom_say(message.from_user)[0] + '](tg://user?id=' + str(message.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    text_from_to_telegram = '[' + def_to_whom_say(message.from_user)[0] + '](tg://user?id=' + str(message.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
     print ('...from_user.id = ')
     print(message.from_user.id)
-    print ('...text_from_to_send = ')
-    print(text_from_to_send)
-   # await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу-2 tg://user?id=' + str(message.from_user.id), parse_mode='Markdown')
-    await message.answer(f'Привет, {text_from_to_send}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
+    print ('...text_from_to_telegram = ')
+    print(text_from_to_telegram)
+   # await message.answer(f'Привет, {text_from_to_telegram}!\nНачинаем работу-2 tg://user?id=' + str(message.from_user.id), parse_mode='Markdown')
+    await message.answer(f'Привет, {text_from_to_telegram}!\nНачинаем работу 👋\n(Используйте внизу кнопки ЗАПУСК и ПОМОЩЬ)', reply_markup=MAIN_KB, parse_mode='Markdown')
  
 
-
+    # дублирующий блок, на удаление, чуть позже
     # if (message.from_user.username is None):
     #     #fff
     # elif ((message.from_user.first_name is None) or (message.from_user.last_name is None)):
@@ -213,35 +215,36 @@ async def process_command_main_menu(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('btn'), state=Status.st_00)
 async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin
+    global begining_text, text_of_obiavy, text_from_to_telegram, text_from_to_export, full_text_telegram, full_text_export, codeDO, send_admin
     await Status.st_01.set()
     codeDO = callback_query.data[-1]  # сформировали команду что будем дальше делать
-    #text_from_to_send_part = <a href="tg://user?id={callback_query.from_user.id}">{def_to_whom_say(callback_query.from_user)[0]}</a> # это такой формат гиперссылки при маркдауне HTML далее работает 
-    text_from_to_send = '[' + def_to_whom_say(callback_query.from_user)[0] + '](tg://user?id=' + str(callback_query.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    #text_from_to_telegram_part = <a href="tg://user?id={callback_query.from_user.id}">{def_to_whom_say(callback_query.from_user)[0]}</a> # это такой формат гиперссылки при маркдауне HTML далее работает 
+    text_from_to_telegram = '[' + def_to_whom_say(callback_query.from_user)[0] + '](tg://user?id=' + str(callback_query.from_user.id) +')' # суть: хотим получить универсальную гиперссылку на пользователя, независимо от того, скрыто его имя или нет 
+    text_from_to_export = def_to_whom_say(callback_query.from_user)[0] # суть: получаем только имя пользователя для экспорта, независимо от того, скрыто его имя или нет 
 
-    #text_from_to_send = '@' + str(callback_query.from_user.username) # здесь пока поставили username, но на самом деле он не всегда есть у пользователя
+    #text_from_to_telegram = '@' + str(callback_query.from_user.username) # здесь пока поставили username, но на самом деле он не всегда есть у пользователя
     if codeDO.isdigit():
         codeDO = int(codeDO)
     if codeDO == 1:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ВАКАНСИЮ') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения вакансии введите ниже ее описание, указав:\n- организацию,\n- город,\n- должность, требования к соискателю и его обязанности,\n- ожидаемое вознаграждение,\n-контакты для связи.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки).\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#вакансия* от ' + text_from_to_send
+        begining_text = '*#вакансия* от ' 
     elif codeDO == 2:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ резюме') 
         await bot.send_message(callback_query.from_user.id, f'Для размещения резюме введите ниже его текст.\n\nВ тексте можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown') 
-        begining_text = '*#резюме* от ' + text_from_to_send
+        begining_text = '*#резюме* от ' 
     elif codeDO == 3:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: ПРЕДЛОЖИТЬ УСЛУГИ') 
         await bot.send_message(callback_query.from_user.id, f'Введите описание предлагаемых Вами услуг.\n\nВ описании можно использовать символы разметки Markdown\n  \*bold text\* (*выделение жирным*)\n  \_italic text\_ (_курсив_)\n  \[text](URL) (для размещения ссылки)\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.', parse_mode='Markdown')  
-        begining_text = '*#Услуги_в_сфере_закупок* от ' + text_from_to_send
+        begining_text = '*#Услуги_в_сфере_закупок* от '
     elif codeDO == 4:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, 'Вы выбрали: РАЗМЕСТИТЬ ИНОЕ СООБЩЕНИЕ') 
         await bot.send_message(callback_query.from_user.id, f'Введите свое сообщение.\n\nЕсли хотите прикрепить файл - то сможете это сделать после размещения текстового сообщения, в рамках его обсуждения.') 
-        begining_text = 'Сообщение от ' + text_from_to_send
+        begining_text = 'Сообщение от '
     elif codeDO == 5:
         send_admin = 'No'
         await bot.send_message(callback_query.from_user.id, help_message, disable_web_page_preview=True) 
@@ -249,7 +252,7 @@ async def process_callback_from_main_menu(callback_query: types.CallbackQuery):
         send_admin = 'Yes'
         await bot.send_message(callback_query.from_user.id, f'Вы выбрали:\nНАПРАВИТЬ СООБЩЕНИЕ АДМИНИСТРАТОРАМ КАНАЛА') 
         await bot.send_message(callback_query.from_user.id, f'Введите текст сообщение') 
-        begining_text = 'СООБЩЕНИЕ АДМИНИСТРАТОРАМ от ' + text_from_to_send
+        begining_text = 'СООБЩЕНИЕ АДМИНИСТРАТОРАМ от ' 
     else:
         #await bot.answer_callback_query(callback_query.id)
     	await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! codeDO={codeDO}')
@@ -280,11 +283,11 @@ def get_inline_kb_Yes_No():
 # Сюда приходит ответ с текстом объявления
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_01) 
 async def vvod_txt(message: types.Message):
-    global begining_text, text_of_obiavy, full_text
+    global begining_text, text_of_obiavy, full_text_telegram
     text_of_obiavy = message.text
-    full_text= begining_text+'\n\n'+text_of_obiavy
-   # full_text = full_text + types.chat.chat_title(chat_id=CHAT)
-    await message.answer(text=f'Итого получаем следующий текст:\n\n{full_text}', parse_mode='Markdown')
+    full_text_telegram= begining_text + text_from_to_telegram + '\n\n' + text_of_obiavy
+   # full_text_telegram = full_text_telegram + types.chat.chat_title(chat_id=CHAT)
+    await message.answer(text=f'Итого получаем следующий текст:\n\n{full_text_telegram}', parse_mode='Markdown')
     await Status.st_02.set()
     await message.answer("Подтверждаете отправку?",
                         reply_markup=get_inline_kb_Yes_No())
@@ -292,7 +295,7 @@ async def vvod_txt(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('YNbtn'), state=Status.st_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin
+    global begining_text, text_of_obiavy, text_from_to_telegram, text_from_to_export, full_text_telegram, full_text_export, codeDO, send_admin
     codeYN = callback_query.data[-1]
     if codeYN.isdigit():
         codeYN = int(codeYN)
@@ -300,12 +303,12 @@ async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
     if codeYN == 1:
         if send_admin == 'Yes':
             await bot.send_message(callback_query.from_user.id, f'Спасибо, сообщение направлено администраторам.') 
-            await bot.send_message(chat_id = ADMIN_CHAT, text=full_text, parse_mode='Markdown') 
+            await bot.send_message(chat_id = ADMIN_CHAT, text=full_text_telegram, parse_mode='Markdown') 
         else:
-            await bot.send_message(chat_id = CHAT, text=full_text, parse_mode='Markdown') 
+            await bot.send_message(chat_id = CHAT, text=full_text_telegram, parse_mode='Markdown') 
             if codeDO < 3:   
                 # ниже 5 строчек - для отправки сообщения в ВК
-                message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + full_text + '\n\nИсточник:\nhttps://t.me/jobzakupki')
+                message_to_VK = ('Форвард нового сообщения из Телеграм:\n\n' + begining_text + text_from_to_export + '\n\n' + text_of_obiavy + '\n\nИсточник:\nhttps://t.me/jobzakupki')
                 message_to_VK = message_to_VK.replace("*#вакансия*", "#вакансия")
                 message_to_VK = message_to_VK.replace("*#резюме*", "#резюме")
                 params = {'owner_id':int(groupId_in_VK), 'from_group': 1, 'message': message_to_VK, 'access_token': token_VK_access_token_to_walls, 'v':5.103} # это отправка дубля на ВК
@@ -334,6 +337,7 @@ async def strange_txt(message: types.Message):
 
 
 #======================== Меню размещения ФОРВАРДНЫХ постов админом
+# алгоритм: если взять любой пост из Телеграма и форварднуть его на бота @CareerZakupkiBot, то этот пост будет переразмещен у нас в канале
 
 def ADMIN_get_inline_kb_Yes_No():
 	# Генерация клавиатуры АДМИНСКОГО меню Yes-No
@@ -349,7 +353,7 @@ def ADMIN_get_inline_kb_Yes_No():
 # Ловим все иные непонятные тексты - все оставшиеся, кроме если в состоянии st_ADM_02
 @dp.message_handler(content_types=types.ContentTypes.TEXT, state=Status.st_00 or Status.st_01 or Status.st_02) # почему-то вариант с перечислением выдал ошибку state=Status.st_00 | Status.st_01 | Status.st_02
 async def strange_txt(message: types.Message):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
+    global begining_text, text_of_obiavy, text_from_to_telegram, text_from_to_export, full_text_telegram, full_text_export, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
     if message.from_user.username == "sukhadol":
         if message.forward_from is None:                  # т.е. если это не форварднутое сообщение, а прямо в чат
             await message.answer("о мой администратор! Что-то написано и не распознано!! (возможно у пользователя скрыта инфа о себе)") 
@@ -371,7 +375,7 @@ async def strange_txt(message: types.Message):
 # Ловим ответ от АДМИНА
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('AdminYNbtn'), state=Status.st_ADM_02)
 async def process_callback_from_menuYN(callback_query: types.CallbackQuery):
-    global begining_text, text_of_obiavy, full_text, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
+    global begining_text, text_of_obiavy, full_text_telegram, codeDO, send_admin, textOfForvardObiavyHtml, textOfForvardObiavyPlain
     codeYN = callback_query.data[-1]
     if codeYN.isdigit():
         codeYN = int(codeYN)
